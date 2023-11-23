@@ -30,10 +30,38 @@ func init() {
 		logrus.Fatalf("error while opening database : %s", err.Error())
 	}
 	schemes := []string{
-		`CREATE TABLE IF NOT EXISTS collections (
-			id VARCHAR(255) PRIMARY KEY NOT NULL UNIQUE,
-			content VARCHAR(255) NOT NULL
-		);`,
+		`
+		CREATE TABLE IF NOT EXISTS Genre (
+			id INTEGER PRIMARY KEY,
+			name TEXT NOT NULL
+		);
+		
+		CREATE TABLE IF NOT EXISTS Artist (
+			id INTEGER PRIMARY KEY,
+			name TEXT NOT NULL
+		);
+		
+		CREATE TABLE IF NOT EXISTS Album (
+			id INTEGER PRIMARY KEY,
+			name TEXT NOT NULL,
+			artistId INTEGER,
+			FOREIGN KEY (artistId) REFERENCES Artist(id)
+		);
+		
+		CREATE TABLE IF NOT EXISTS Music (
+			id INTEGER PRIMARY KEY,
+			title TEXT NOT NULL,
+			genreId INTEGER,
+			artistId INTEGER,
+			albumId INTEGER,
+			FOREIGN KEY (genreId) REFERENCES Genre(id),
+			FOREIGN KEY (artistId) REFERENCES Artist(id),
+			FOREIGN KEY (albumId) REFERENCES Album(id)
+		);
+		
+		CREATE INDEX IF NOT EXISTS idx_artist_name ON Artist(name);
+		CREATE INDEX IF NOT EXISTS idx_album_name ON Album(name);
+		`,
 	}
 	for _, scheme := range schemes {
 		if _, err := db.Exec(scheme); err != nil {
