@@ -1,28 +1,28 @@
-package collections
+package musics
 
 import (
 	"encoding/json"
 	"github.com/gofrs/uuid"
 	"github.com/sirupsen/logrus"
 	"middleware/example/internal/models"
-	"middleware/example/internal/repositories/collections"
+	"middleware/example/internal/repositories/musics"
 	"net/http"
 )
 
-// GetCollection
-// @Tags         collections
-// @Summary      Get a collection.
-// @Description  Get a collection.
-// @Param        id           	path      string  true  "Collection UUID formatted ID"
+// GetMusic
+// @Tags         musics
+// @Summary      Get a music.
+// @Description  Get a music.
+// @Param        id           	path      string  true  "Music UUID formatted ID"
 // @Success      200            {object}  models.Collection
 // @Failure      422            "Cannot parse id"
 // @Failure      500            "Something went wrong"
-// @Router       /collections/{id} [get]
-func GetCollection(w http.ResponseWriter, r *http.Request) {
+// @Router       /musics/{id} [get]
+func GetMusic(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	collectionId, _ := ctx.Value("collectionId").(uuid.UUID)
+	musicId, _ := ctx.Value("musicId").(uuid.UUID)
 
-	collection, err := collections.GetCollectionById(collectionId)
+	musics, err := musics.GetMusicById(musicId)
 	if err != nil {
 		logrus.Errorf("error : %s", err.Error())
 		customError, isCustom := err.(*models.CustomError)
@@ -37,7 +37,7 @@ func GetCollection(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	body, _ := json.Marshal(collection)
+	body, _ := json.Marshal(musics)
 	_, _ = w.Write(body)
 	return
 }

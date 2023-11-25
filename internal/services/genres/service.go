@@ -6,7 +6,7 @@ import (
 	"github.com/gofrs/uuid"
 	"github.com/sirupsen/logrus"
 	"middleware/example/internal/models"
-	repository "middleware/example/internal/repositories/collections"
+	repository "middleware/example/internal/repositories/genres"
 	"net/http"
 )
 

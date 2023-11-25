@@ -1,25 +1,23 @@
-package collections
+package musics
 
 import (
 	"encoding/json"
 	"github.com/sirupsen/logrus"
 	"middleware/example/internal/models"
-	"middleware/example/internal/services/collections"
+	repository "middleware/example/internal/repositories/musics"
 	"net/http"
 )
 
-// GetCollections
-// @Tags         collections
-// @Summary      Get collections.
-// @Description  Get collections.
-// @Success      200            {array}  models.Collection
+// GetMusics
+// @Tags         musics
+// @Summary      Get musics.
+// @Description  Get musics.
+// @Success      200            {array}  models.Music
 // @Failure      500             "Something went wrong"
-// @Router       /collections [get]
-func GetCollections(w http.ResponseWriter, _ *http.Request) {
-	// calling service
-	collections, err := collections.GetAllCollections()
+// @Router       /musics [get]
+func GetMusics(w http.ResponseWriter, _ *http.Request) {
+	musics, err := repository.GetAllMusics()
 	if err != nil {
-		// logging error
 		logrus.Errorf("error : %s", err.Error())
 		customError, isCustom := err.(*models.CustomError)
 		if isCustom {
@@ -35,7 +33,7 @@ func GetCollections(w http.ResponseWriter, _ *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	body, _ := json.Marshal(collections)
+	body, _ := json.Marshal(musics)
 	_, _ = w.Write(body)
 	return
 }
