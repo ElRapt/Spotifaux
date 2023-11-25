@@ -4,23 +4,23 @@
 ## Tables and Fields
 
 **1. Music**
-- `id`: Integer, Primary Key
+- `id`: UUID, Primary Key
 - `title`: String
 - `genreId`: Integer, Foreign Key (references Genre)
 - `artistId`: Integer, Foreign Key (references Artist)
 - `albumId`: Integer, Foreign Key (references Album)
 
 **2. Artist**
-- `id`: Integer, Primary Key
+- `id`: UUID, Primary Key
 - `name`: String
 
 **3. Album**
-- `id`: Integer, Primary Key
+- `id`: UUID, Primary Key
 - `name`: String
 - `artistId`: Integer, Foreign Key (references Artist)
 
 **4. Genre**
-- `id`: Integer, Primary Key
+- `id`: UUID, Primary Key
 - `name`: String
 
 ## Relationships

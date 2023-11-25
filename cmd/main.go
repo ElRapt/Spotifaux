@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/go-chi/chi/v5"
 	"github.com/sirupsen/logrus"
 	"middleware/example/internal/controllers/collections"
 	"middleware/example/internal/helpers"
@@ -32,28 +31,28 @@ func init() {
 	schemes := []string{
 		`
 		CREATE TABLE IF NOT EXISTS Genre (
-			id INTEGER PRIMARY KEY,
+			id CHAR(36) PRIMARY KEY,
 			name TEXT NOT NULL
 		);
 		
 		CREATE TABLE IF NOT EXISTS Artist (
-			id INTEGER PRIMARY KEY,
+			id CHAR(36) PRIMARY KEY,
 			name TEXT NOT NULL
 		);
 		
 		CREATE TABLE IF NOT EXISTS Album (
-			id INTEGER PRIMARY KEY,
+			id CHAR(36) PRIMARY KEY,
 			name TEXT NOT NULL,
-			artistId INTEGER,
+			artistId CHAR(36),
 			FOREIGN KEY (artistId) REFERENCES Artist(id)
 		);
 		
 		CREATE TABLE IF NOT EXISTS Music (
-			id INTEGER PRIMARY KEY,
+			id CHAR(36) PRIMARY KEY,
 			title TEXT NOT NULL,
-			genreId INTEGER,
-			artistId INTEGER,
-			albumId INTEGER,
+			genreId CHAR(36),
+			artistId CHAR(36),
+			albumId CHAR(36),
 			FOREIGN KEY (genreId) REFERENCES Genre(id),
 			FOREIGN KEY (artistId) REFERENCES Artist(id),
 			FOREIGN KEY (albumId) REFERENCES Album(id)

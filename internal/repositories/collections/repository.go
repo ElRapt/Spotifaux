@@ -6,45 +6,39 @@ import (
 	"middleware/example/internal/models"
 )
 
-func GetAllCollections() ([]models.Collection, error) {
+func GetAllMusics() ([]models.Music, error) {
 	db, err := helpers.OpenDB()
 	if err != nil {
 		return nil, err
 	}
-	rows, err := db.Query("SELECT * FROM collections")
-	helpers.CloseDB(db)
+	defer helpers.CloseDB(db)
+	rows, err := db.Query("SELECT * FROM Music")
 	if err != nil {
 		return nil, err
 	}
-
-	// parsing datas in object slice
-	collections := []models.Collection{}
+	defer rows.Close()
+	var musics []models.Music
 	for rows.Next() {
-		var data models.Collection
-		err = rows.Scan(&data.Id, &data.Content)
+		var m models.Music
+		err := rows.Scan(&m.Id, &m.Title, &m.GenreId, &m.ArtistId, &m.AlbumId)
 		if err != nil {
 			return nil, err
 		}
-		collections = append(collections, data)
+		musics = append(musics, m)
 	}
-	// don't forget to close rows
-	_ = rows.Close()
-
-	return collections, err
+	return musics, nil
 }
 
-func GetCollectionById(id uuid.UUID) (*models.Collection, error) {
+func GetMusicById(id uuid.UUID) (*models.Music, error) {
 	db, err := helpers.OpenDB()
 	if err != nil {
 		return nil, err
 	}
-	row := db.QueryRow("SELECT * FROM collections WHERE id=?", id.String())
-	helpers.CloseDB(db)
-
-	var collection models.Collection
-	err = row.Scan(&collection.Id, &collection.Content)
+	defer helpers.CloseDB(db)
+	var m models.Music
+	err = db.QueryRow("SELECT * FROM Music WHERE id = ?", id).Scan(&m.Id, &m.Title, &m.GenreId, &m.ArtistId, &m.AlbumId)
 	if err != nil {
 		return nil, err
 	}
-	return &collection, err
+	return &m, nil
 }
