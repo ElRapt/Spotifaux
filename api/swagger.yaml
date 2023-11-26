@@ -1,10 +1,16 @@
 basePath: /
 definitions:
-  models.Collection:
+  models.Music:
     properties:
-      content:
+      albumId:
+        type: string
+      artistId:
+        type: string
+      genreId:
         type: string
       id:
+        type: string
+      title:
         type: string
     type: object
 info:
@@ -15,26 +21,47 @@ info:
   title: middleware/example
   version: 1.0.0
 paths:
-  /collections:
+  /musics:
     get:
-      description: Get collections.
+      description: Get musics.
       responses:
         "200":
           description: OK
           schema:
             items:
-              $ref: '#/definitions/models.Collection'
+              $ref: '#/definitions/models.Music'
             type: array
         "500":
           description: Something went wrong
-      summary: Get collections.
+      summary: Get musics.
       tags:
-      - collections
-  /collections/{id}:
-    get:
-      description: Get a collection.
+      - musics
+    post:
+      description: Create a music.
       parameters:
-      - description: Collection UUID formatted ID
+      - description: Music object
+        in: body
+        name: body
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Music'
+            type: array
+        "500":
+          description: Something went wrong
+      summary: Create a music.
+      tags:
+      - musics
+  /musics/{id}:
+    get:
+      description: Get a music.
+      parameters:
+      - description: Music UUID formatted ID
         in: path
         name: id
         required: true
@@ -43,14 +70,14 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/models.Collection'
+            $ref: '#/definitions/models.Music'
         "422":
           description: Cannot parse id
         "500":
           description: Something went wrong
-      summary: Get a collection.
+      summary: Get a music.
       tags:
-      - collections
+      - musics
 schemes:
 - http
 swagger: "2.0"

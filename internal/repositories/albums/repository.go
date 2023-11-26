@@ -2,9 +2,10 @@ package albums
 
 import (
 	"database/sql"
-	"github.com/gofrs/uuid"
 	"middleware/example/internal/helpers"
 	"middleware/example/internal/models"
+
+	"github.com/gofrs/uuid"
 )
 
 func GetAllAlbums() ([]models.Album, error) {
@@ -66,7 +67,7 @@ func PostAlbum(newAlbum models.Album) (uuid.UUID, error) {
 	return newAlbum.Id, nil
 }
 
-func Put(id uuid.UUID, updatedAlbum models.Album) error {
+func PutAlbum(id uuid.UUID, updatedAlbum models.Album) error {
 	db, err := helpers.OpenDB()
 	if err != nil {
 		return err

@@ -18,20 +18,52 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/collections": {
+        "/musics": {
             "get": {
-                "description": "Get collections.",
+                "description": "Get musics.",
                 "tags": [
-                    "collections"
+                    "musics"
                 ],
-                "summary": "Get collections.",
+                "summary": "Get musics.",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.Collection"
+                                "$ref": "#/definitions/models.Music"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong"
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a music.",
+                "tags": [
+                    "musics"
+                ],
+                "summary": "Create a music.",
+                "parameters": [
+                    {
+                        "description": "Music object",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Music"
                             }
                         }
                     },
@@ -41,17 +73,17 @@ const docTemplate = `{
                 }
             }
         },
-        "/collections/{id}": {
+        "/musics/{id}": {
             "get": {
-                "description": "Get a collection.",
+                "description": "Get a music.",
                 "tags": [
-                    "collections"
+                    "musics"
                 ],
-                "summary": "Get a collection.",
+                "summary": "Get a music.",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Collection UUID formatted ID",
+                        "description": "Music UUID formatted ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -61,7 +93,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Collection"
+                            "$ref": "#/definitions/models.Music"
                         }
                     },
                     "422": {
@@ -75,13 +107,22 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "models.Collection": {
+        "models.Music": {
             "type": "object",
             "properties": {
-                "content": {
+                "albumId": {
+                    "type": "string"
+                },
+                "artistId": {
+                    "type": "string"
+                },
+                "genreId": {
                     "type": "string"
                 },
                 "id": {
+                    "type": "string"
+                },
+                "title": {
                     "type": "string"
                 }
             }

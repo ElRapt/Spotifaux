@@ -2,11 +2,12 @@ package musics
 
 import (
 	"encoding/json"
-	"github.com/gofrs/uuid"
-	"github.com/sirupsen/logrus"
 	"middleware/example/internal/models"
 	"middleware/example/internal/repositories/musics"
 	"net/http"
+
+	"github.com/gofrs/uuid"
+	"github.com/sirupsen/logrus"
 )
 
 // GetMusic
@@ -14,7 +15,7 @@ import (
 // @Summary      Get a music.
 // @Description  Get a music.
 // @Param        id           	path      string  true  "Music UUID formatted ID"
-// @Success      200            {object}  models.Collection
+// @Success      200            {object}  models.Music
 // @Failure      422            "Cannot parse id"
 // @Failure      500            "Something went wrong"
 // @Router       /musics/{id} [get]

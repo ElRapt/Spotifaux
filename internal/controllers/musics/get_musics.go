@@ -2,10 +2,11 @@ package musics
 
 import (
 	"encoding/json"
-	"github.com/sirupsen/logrus"
 	"middleware/example/internal/models"
-	repository "middleware/example/internal/repositories/musics"
+	"middleware/example/internal/services/musics"
 	"net/http"
+
+	"github.com/sirupsen/logrus"
 )
 
 // GetMusics
@@ -16,7 +17,7 @@ import (
 // @Failure      500             "Something went wrong"
 // @Router       /musics [get]
 func GetMusics(w http.ResponseWriter, _ *http.Request) {
-	musics, err := repository.GetAllMusics()
+	musics, err := musics.GetAllMusics()
 	if err != nil {
 		logrus.Errorf("error : %s", err.Error())
 		customError, isCustom := err.(*models.CustomError)
