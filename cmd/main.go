@@ -1,12 +1,14 @@
 package main
 
 import (
-	"github.com/go-chi/chi"
-	"github.com/sirupsen/logrus"
+	"middleware/example/internal/controllers/artists"
 	"middleware/example/internal/controllers/musics"
 	"middleware/example/internal/helpers"
 	_ "middleware/example/internal/models"
 	"net/http"
+
+	"github.com/go-chi/chi"
+	"github.com/sirupsen/logrus"
 )
 
 func main() {
@@ -17,6 +19,14 @@ func main() {
 		r.Route("/{id}", func(r chi.Router) {
 			r.Use(musics.Ctx)
 			r.Get("/", musics.GetMusic)
+		})
+	})
+
+	r.Route("/artists", func(r chi.Router) {
+		r.Get("/", artists.GetArtists)
+		r.Route("/{id}", func(r chi.Router) {
+			r.Use(artists.Ctx)
+			r.Get("/", artists.GetArtist)
 		})
 	})
 
