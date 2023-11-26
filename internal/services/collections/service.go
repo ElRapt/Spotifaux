@@ -44,3 +44,19 @@ func GetCollectionById(id uuid.UUID) (*models.Collection, error) {
 
 	return collection, err
 }
+
+func GetAllUsers() ([]models.Users, error) {
+	var err error
+	// calling repository
+	users, err := repository.GetAllUsers()
+	// managing errors
+	if err != nil {
+		logrus.Errorf("error retrieving users : %s", err.Error())
+		return nil, &models.CustomError{
+			Message: "Something went wrong (users)",
+			Code:    500,
+		}
+	}
+
+	return users, nil
+}

@@ -48,3 +48,36 @@ func GetCollectionById(id uuid.UUID) (*models.Collection, error) {
 	}
 	return &collection, err
 }
+
+func GetAllUsers() ([]models.Users, error) {
+	db, err := helpers.OpenDB()
+	if err != nil {
+		return nil, err
+	}
+	rows, err := db.Query("SELECT * FROM users")
+	helpers.CloseDB(db)
+	if err != nil {
+		return nil, err
+	}
+
+	// parsing datas in object slice
+	users := []models.Users{}
+	for rows.Next() {
+		var data models.Users
+		err = rows.Scan(
+			&data.Id,
+			&data.Username,
+			&data.Email,
+			&data.CreatedAt,
+		)
+		if err != nil {
+			return nil, err
+		}
+		users = append(users, data)
+	}
+
+	// don't forget to close rows
+	_ = rows.Close()
+
+	return users, err
+}
