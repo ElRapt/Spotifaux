@@ -18,6 +18,61 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/artists": {
+            "get": {
+                "description": "Get artists.",
+                "tags": [
+                    "artists"
+                ],
+                "summary": "Get artists.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Artist"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong"
+                    }
+                }
+            }
+        },
+        "/artists/{id}": {
+            "get": {
+                "description": "Get an artist.",
+                "tags": [
+                    "artists"
+                ],
+                "summary": "Get an artist.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Artist UUID formatted ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Artist"
+                        }
+                    },
+                    "422": {
+                        "description": "Cannot parse id"
+                    },
+                    "500": {
+                        "description": "Something went wrong"
+                    }
+                }
+            }
+        },
         "/musics": {
             "get": {
                 "description": "Get musics.",
@@ -103,10 +158,51 @@ const docTemplate = `{
                         "description": "Something went wrong"
                     }
                 }
+            },
+            "delete": {
+                "description": "Delete a music.",
+                "tags": [
+                    "musics"
+                ],
+                "summary": "Delete a music.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Music UUID formatted ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "422": {
+                        "description": "Cannot parse id"
+                    },
+                    "500": {
+                        "description": "Something went wrong"
+                    }
+                }
             }
         }
     },
     "definitions": {
+        "models.Artist": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "models.Music": {
             "type": "object",
             "properties": {

@@ -19,6 +19,7 @@ func main() {
 		r.Route("/{id}", func(r chi.Router) {
 			r.Use(musics.Ctx)
 			r.Get("/", musics.GetMusic)
+			r.Delete("/", musics.DeleteMusic)
 		})
 	})
 
