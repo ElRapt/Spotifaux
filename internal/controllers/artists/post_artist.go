@@ -1,25 +1,25 @@
-package musics
+package artists
 
 import (
 	"encoding/json"
 	"middleware/example/internal/models"
-	"middleware/example/internal/services/musics"
+	"middleware/example/internal/services/artists"
 	"net/http"
 
 	"github.com/sirupsen/logrus"
 )
 
-// PostMusic
-// @Tags         musics
-// @Summary      Create a music.
-// @Description  Create a music.
-// @Param        body         	body      string  true  "Music object"
-// @Success      200            {array}  models.Music
+// PostArtist
+// @Tags         artists
+// @Summary      Create an Artist.
+// @Description  Create an Artist.
+// @Param        body         	body      string  true  "Artist object"
+// @Success      200            {array}  models.Artist
 // @Failure      500             "Something went wrong"
-// @Router       /musics [post]
-func PostMusic(w http.ResponseWriter, r *http.Request) {
-	var newMusic models.Music
-	err := json.NewDecoder(r.Body).Decode(&newMusic)
+// @Router       /artists [post]
+func PostArtist(w http.ResponseWriter, r *http.Request) {
+	var newArtist models.Artist
+	err := json.NewDecoder(r.Body).Decode(&newArtist)
 	if err != nil {
 		logrus.Errorf("error : %s", err.Error())
 		customError := &models.CustomError{
@@ -32,7 +32,7 @@ func PostMusic(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	musicId, err := musics.PostMusic(newMusic)
+	ArtistId, err := artists.PostArtist(newArtist)
 	if err != nil {
 		logrus.Errorf("error : %s", err.Error())
 		customError, isCustom := err.(*models.CustomError)
@@ -46,7 +46,7 @@ func PostMusic(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	music, err := musics.GetMusicById(musicId)
+	Artist, err := artists.GetArtistById(ArtistId)
 	if err != nil {
 		logrus.Errorf("error : %s", err.Error())
 		customError, isCustom := err.(*models.CustomError)
@@ -61,7 +61,7 @@ func PostMusic(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	body, _ := json.Marshal(music)
+	body, _ := json.Marshal(Artist)
 	_, _ = w.Write(body)
 	return
 }

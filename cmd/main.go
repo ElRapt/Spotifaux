@@ -28,9 +28,12 @@ func main() {
 
 	r.Route("/artists", func(r chi.Router) {
 		r.Get("/", artists.GetArtists)
+		r.Post("/", artists.PostArtist)
 		r.Route("/{id}", func(r chi.Router) {
 			r.Use(artists.Ctx)
 			r.Get("/", artists.GetArtist)
+			r.Delete("/", artists.DeleteArtist)
+			r.Put("/", artists.PutArtist)
 		})
 	})
 
