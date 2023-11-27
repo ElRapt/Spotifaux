@@ -1,6 +1,7 @@
 package main
 
 import (
+	"middleware/example/internal/controllers/albums"
 	"middleware/example/internal/controllers/artists"
 	"middleware/example/internal/controllers/musics"
 	"middleware/example/internal/helpers"
@@ -34,6 +35,17 @@ func main() {
 			r.Get("/", artists.GetArtist)
 			r.Delete("/", artists.DeleteArtist)
 			r.Put("/", artists.PutArtist)
+		})
+	})
+
+	r.Route("/albums", func(r chi.Router) {
+		r.Get("/", albums.GetAlbums)
+		r.Post("/", albums.PostAlbum)
+		r.Route("/{id}", func(r chi.Router) {
+			r.Use(albums.Ctx)
+			r.Get("/", albums.GetAlbum)
+			r.Delete("/", albums.DeleteAlbum)
+			r.Put("/", albums.PutAlbum)
 		})
 	})
 
