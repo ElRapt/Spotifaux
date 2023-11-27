@@ -16,12 +16,12 @@ func main() {
 
 	r.Route("/musics", func(r chi.Router) {
 		r.Get("/", musics.GetMusics)
+		r.Post("/", musics.PostMusic)
 		r.Route("/{id}", func(r chi.Router) {
 			r.Use(musics.Ctx)
 			r.Get("/", musics.GetMusic)
-			r.Post("/", musics.PostMusic)
-			r.Put("/", musics.PutMusic)
 			r.Delete("/", musics.DeleteMusic)
+			r.Put("/", musics.PutMusic)
 
 		})
 	})
