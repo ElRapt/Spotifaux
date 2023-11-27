@@ -15,7 +15,7 @@ import (
 // @Summary      Get a genre.
 // @Description  Get a genre.
 // @Param        id           	path      string  true  "genre UUID formatted ID"
-// @Success      200            {object}  models.genre
+// @Success      200            {object}  models.Genre
 // @Failure      422            "Cannot parse id"
 // @Failure      500            "Something went wrong"
 // @Router       /genres/{id} [get]

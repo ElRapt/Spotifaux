@@ -10,14 +10,170 @@ const docTemplate = `{
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
         "contact": {
-            "name": "Justine Bachelard.",
-            "email": "justine.bachelard@ext.uca.fr"
+            "name": "Lucas Denis.",
+            "email": "lucas.denis@etu.uca.fr"
         },
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/albums": {
+            "get": {
+                "description": "Get albums.",
+                "tags": [
+                    "albums"
+                ],
+                "summary": "Get albums.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Album"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong"
+                    }
+                }
+            },
+            "post": {
+                "description": "Create an Album.",
+                "tags": [
+                    "albums"
+                ],
+                "summary": "Create an Album.",
+                "parameters": [
+                    {
+                        "description": "Album object",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Album"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong"
+                    }
+                }
+            }
+        },
+        "/albums/{id}": {
+            "get": {
+                "description": "Get an album.",
+                "tags": [
+                    "albums"
+                ],
+                "summary": "Get an album.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Album UUID formatted ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Album"
+                        }
+                    },
+                    "422": {
+                        "description": "Cannot parse id"
+                    },
+                    "500": {
+                        "description": "Something went wrong"
+                    }
+                }
+            },
+            "put": {
+                "description": "Update an Album.",
+                "tags": [
+                    "albums"
+                ],
+                "summary": "Update an Album.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Album UUID formatted ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Album object",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "422": {
+                        "description": "Cannot parse id"
+                    },
+                    "500": {
+                        "description": "Something went wrong"
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete an Album.",
+                "tags": [
+                    "albums"
+                ],
+                "summary": "Delete an Album.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Album UUID formatted ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "422": {
+                        "description": "Cannot parse id"
+                    },
+                    "500": {
+                        "description": "Something went wrong"
+                    }
+                }
+            }
+        },
         "/artists": {
             "get": {
                 "description": "Get artists.",
@@ -25,6 +181,38 @@ const docTemplate = `{
                     "artists"
                 ],
                 "summary": "Get artists.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Artist"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong"
+                    }
+                }
+            },
+            "post": {
+                "description": "Create an Artist.",
+                "tags": [
+                    "artists"
+                ],
+                "summary": "Create an Artist.",
+                "parameters": [
+                    {
+                        "description": "Artist object",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -62,6 +250,231 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/models.Artist"
+                        }
+                    },
+                    "422": {
+                        "description": "Cannot parse id"
+                    },
+                    "500": {
+                        "description": "Something went wrong"
+                    }
+                }
+            },
+            "put": {
+                "description": "Update an Artist.",
+                "tags": [
+                    "artists"
+                ],
+                "summary": "Update an Artist.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Artist UUID formatted ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Artist object",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "422": {
+                        "description": "Cannot parse id"
+                    },
+                    "500": {
+                        "description": "Something went wrong"
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete an Artist.",
+                "tags": [
+                    "artists"
+                ],
+                "summary": "Delete an Artist.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Artist UUID formatted ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "422": {
+                        "description": "Cannot parse id"
+                    },
+                    "500": {
+                        "description": "Something went wrong"
+                    }
+                }
+            }
+        },
+        "/genres": {
+            "get": {
+                "description": "Get genres.",
+                "tags": [
+                    "genres"
+                ],
+                "summary": "Get genres.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Genre"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong"
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a Genre.",
+                "tags": [
+                    "genres"
+                ],
+                "summary": "Create a Genre.",
+                "parameters": [
+                    {
+                        "description": "Genre object",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Genre"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Something went wrong"
+                    }
+                }
+            }
+        },
+        "/genres/{id}": {
+            "get": {
+                "description": "Get a genre.",
+                "tags": [
+                    "genres"
+                ],
+                "summary": "Get a genre.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "genre UUID formatted ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Genre"
+                        }
+                    },
+                    "422": {
+                        "description": "Cannot parse id"
+                    },
+                    "500": {
+                        "description": "Something went wrong"
+                    }
+                }
+            },
+            "put": {
+                "description": "Update a Genre.",
+                "tags": [
+                    "genres"
+                ],
+                "summary": "Update a Genre.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Genre UUID formatted ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Genre object",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "422": {
+                        "description": "Cannot parse id"
+                    },
+                    "500": {
+                        "description": "Something went wrong"
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete a Genre.",
+                "tags": [
+                    "genres"
+                ],
+                "summary": "Delete a Genre.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Genre UUID formatted ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
                         }
                     },
                     "422": {
@@ -159,6 +572,45 @@ const docTemplate = `{
                     }
                 }
             },
+            "put": {
+                "description": "Update a music.",
+                "tags": [
+                    "musics"
+                ],
+                "summary": "Update a music.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Music UUID formatted ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Music object",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "422": {
+                        "description": "Cannot parse id"
+                    },
+                    "500": {
+                        "description": "Something went wrong"
+                    }
+                }
+            },
             "delete": {
                 "description": "Delete a music.",
                 "tags": [
@@ -192,7 +644,32 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "models.Album": {
+            "type": "object",
+            "properties": {
+                "artistId": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
         "models.Artist": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Genre": {
             "type": "object",
             "properties": {
                 "id": {
@@ -232,8 +709,8 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "",
 	BasePath:         "/",
 	Schemes:          []string{"http"},
-	Title:            "middleware/example",
-	Description:      "API to manage collections.",
+	Title:            "Spotifaux",
+	Description:      "Spotifaux's renowned API.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

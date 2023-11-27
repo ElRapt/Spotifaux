@@ -11,14 +11,14 @@ import (
 )
 
 // DeleteArtist
-// @Tags         Artists
+// @Tags         artists
 // @Summary      Delete an Artist.
 // @Description  Delete an Artist.
 // @Param        id           	path      string  true  "Artist UUID formatted ID"
 // @Success      200            {object}  string
 // @Failure      422            "Cannot parse id"
 // @Failure      500            "Something went wrong"
-// @Router       /Artists/{id} [delete]
+// @Router       /artists/{id} [delete]
 func DeleteArtist(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	artistId, _ := ctx.Value("artistId").(uuid.UUID)

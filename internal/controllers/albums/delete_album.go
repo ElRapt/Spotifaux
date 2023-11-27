@@ -18,7 +18,7 @@ import (
 // @Success      200            {object}  string
 // @Failure      422            "Cannot parse id"
 // @Failure      500            "Something went wrong"
-// @Router       /Albums/{id} [delete]
+// @Router       /albums/{id} [delete]
 func DeleteAlbum(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	albumId, _ := ctx.Value("albumId").(uuid.UUID)

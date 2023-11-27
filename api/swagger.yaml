@@ -1,6 +1,22 @@
 basePath: /
 definitions:
+  models.Album:
+    properties:
+      artistId:
+        type: string
+      id:
+        type: string
+      name:
+        type: string
+    type: object
   models.Artist:
+    properties:
+      id:
+        type: string
+      name:
+        type: string
+    type: object
+  models.Genre:
     properties:
       id:
         type: string
@@ -22,12 +38,115 @@ definitions:
     type: object
 info:
   contact:
-    email: justine.bachelard@ext.uca.fr
-    name: Justine Bachelard.
-  description: API to manage collections.
-  title: middleware/example
+    email: lucas.denis@etu.uca.fr
+    name: Lucas Denis.
+  description: Spotifaux's renowned API.
+  title: Spotifaux
   version: 1.0.0
 paths:
+  /albums:
+    get:
+      description: Get albums.
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Album'
+            type: array
+        "500":
+          description: Something went wrong
+      summary: Get albums.
+      tags:
+      - albums
+    post:
+      description: Create an Album.
+      parameters:
+      - description: Album object
+        in: body
+        name: body
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Album'
+            type: array
+        "500":
+          description: Something went wrong
+      summary: Create an Album.
+      tags:
+      - albums
+  /albums/{id}:
+    delete:
+      description: Delete an Album.
+      parameters:
+      - description: Album UUID formatted ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "422":
+          description: Cannot parse id
+        "500":
+          description: Something went wrong
+      summary: Delete an Album.
+      tags:
+      - albums
+    get:
+      description: Get an album.
+      parameters:
+      - description: Album UUID formatted ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Album'
+        "422":
+          description: Cannot parse id
+        "500":
+          description: Something went wrong
+      summary: Get an album.
+      tags:
+      - albums
+    put:
+      description: Update an Album.
+      parameters:
+      - description: Album UUID formatted ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Album object
+        in: body
+        name: body
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "422":
+          description: Cannot parse id
+        "500":
+          description: Something went wrong
+      summary: Update an Album.
+      tags:
+      - albums
   /artists:
     get:
       description: Get artists.
@@ -43,7 +162,48 @@ paths:
       summary: Get artists.
       tags:
       - artists
+    post:
+      description: Create an Artist.
+      parameters:
+      - description: Artist object
+        in: body
+        name: body
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Artist'
+            type: array
+        "500":
+          description: Something went wrong
+      summary: Create an Artist.
+      tags:
+      - artists
   /artists/{id}:
+    delete:
+      description: Delete an Artist.
+      parameters:
+      - description: Artist UUID formatted ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "422":
+          description: Cannot parse id
+        "500":
+          description: Something went wrong
+      summary: Delete an Artist.
+      tags:
+      - artists
     get:
       description: Get an artist.
       parameters:
@@ -64,6 +224,135 @@ paths:
       summary: Get an artist.
       tags:
       - artists
+    put:
+      description: Update an Artist.
+      parameters:
+      - description: Artist UUID formatted ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Artist object
+        in: body
+        name: body
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "422":
+          description: Cannot parse id
+        "500":
+          description: Something went wrong
+      summary: Update an Artist.
+      tags:
+      - artists
+  /genres:
+    get:
+      description: Get genres.
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Genre'
+            type: array
+        "500":
+          description: Something went wrong
+      summary: Get genres.
+      tags:
+      - genres
+    post:
+      description: Create a Genre.
+      parameters:
+      - description: Genre object
+        in: body
+        name: body
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Genre'
+            type: array
+        "500":
+          description: Something went wrong
+      summary: Create a Genre.
+      tags:
+      - genres
+  /genres/{id}:
+    delete:
+      description: Delete a Genre.
+      parameters:
+      - description: Genre UUID formatted ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "422":
+          description: Cannot parse id
+        "500":
+          description: Something went wrong
+      summary: Delete a Genre.
+      tags:
+      - genres
+    get:
+      description: Get a genre.
+      parameters:
+      - description: genre UUID formatted ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Genre'
+        "422":
+          description: Cannot parse id
+        "500":
+          description: Something went wrong
+      summary: Get a genre.
+      tags:
+      - genres
+    put:
+      description: Update a Genre.
+      parameters:
+      - description: Genre UUID formatted ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Genre object
+        in: body
+        name: body
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "422":
+          description: Cannot parse id
+        "500":
+          description: Something went wrong
+      summary: Update a Genre.
+      tags:
+      - genres
   /musics:
     get:
       description: Get musics.
@@ -139,6 +428,32 @@ paths:
         "500":
           description: Something went wrong
       summary: Get a music.
+      tags:
+      - musics
+    put:
+      description: Update a music.
+      parameters:
+      - description: Music UUID formatted ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Music object
+        in: body
+        name: body
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "422":
+          description: Cannot parse id
+        "500":
+          description: Something went wrong
+      summary: Update a music.
       tags:
       - musics
 schemes:
