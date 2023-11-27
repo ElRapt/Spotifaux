@@ -1,29 +1,29 @@
-package albums
+package genres
 
 import (
 	"encoding/json"
 	"middleware/example/internal/models"
-	"middleware/example/internal/services/albums"
+	"middleware/example/internal/services/genres"
 	"net/http"
 
 	"github.com/gofrs/uuid"
 	"github.com/sirupsen/logrus"
 )
 
-// GetAlbum
-// @Tags         albums
-// @Summary      Get an album.
-// @Description  Get an album.
-// @Param        id           	path      string  true  "Album UUID formatted ID"
-// @Success      200            {object}  models.Album
+// GetGenre
+// @Tags         genres
+// @Summary      Get a genre.
+// @Description  Get a genre.
+// @Param        id           	path      string  true  "genre UUID formatted ID"
+// @Success      200            {object}  models.genre
 // @Failure      422            "Cannot parse id"
 // @Failure      500            "Something went wrong"
-// @Router       /albums/{id} [get]
-func GetAlbum(w http.ResponseWriter, r *http.Request) {
+// @Router       /genres/{id} [get]
+func GetGenre(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	albumId, _ := ctx.Value("albumId").(uuid.UUID)
+	genreId, _ := ctx.Value("genreId").(uuid.UUID)
 
-	album, err := albums.GetAlbumById(albumId)
+	genre, err := genres.GetGenreById(genreId)
 	if err != nil {
 		logrus.Errorf("error : %s", err.Error())
 		customError, isCustom := err.(*models.CustomError)
@@ -38,7 +38,7 @@ func GetAlbum(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	body, _ := json.Marshal(album)
+	body, _ := json.Marshal(genre)
 	_, _ = w.Write(body)
 	return
 }
