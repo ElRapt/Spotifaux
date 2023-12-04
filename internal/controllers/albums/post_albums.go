@@ -2,6 +2,8 @@ package albums
 
 import (
 	"encoding/json"
+	"encoding/xml"
+	"middleware/example/internal/helpers"
 	"middleware/example/internal/models"
 	"middleware/example/internal/services/albums"
 	"net/http"
@@ -19,17 +21,30 @@ import (
 // @Router       /albums [post]
 func PostAlbum(w http.ResponseWriter, r *http.Request) {
 	var newAlbum models.Album
-	err := json.NewDecoder(r.Body).Decode(&newAlbum)
-	if err != nil {
-		logrus.Errorf("error : %s", err.Error())
-		customError := &models.CustomError{
-			Message: "cannot parse body",
-			Code:    http.StatusUnprocessableEntity,
+
+	switch r.Header.Get("Content-Type") {
+	case "application/xml":
+		err := xml.NewDecoder(r.Body).Decode(&newAlbum)
+		if err != nil {
+			logrus.Errorf("error : %s", err.Error())
+			customError := &models.CustomError{
+				Message: "cannot parse body as XML",
+				Code:    http.StatusUnprocessableEntity,
+			}
+			helpers.RespondWithFormat(w, r, customError)
+			return
 		}
-		w.WriteHeader(customError.Code)
-		body, _ := json.Marshal(customError)
-		_, _ = w.Write(body)
-		return
+	default:
+		err := json.NewDecoder(r.Body).Decode(&newAlbum)
+		if err != nil {
+			logrus.Errorf("error : %s", err.Error())
+			customError := &models.CustomError{
+				Message: "cannot parse body as JSON",
+				Code:    http.StatusUnprocessableEntity,
+			}
+			helpers.RespondWithFormat(w, r, customError)
+			return
+		}
 	}
 
 	albumId, err := albums.PostAlbum(newAlbum)
@@ -38,30 +53,27 @@ func PostAlbum(w http.ResponseWriter, r *http.Request) {
 		customError, isCustom := err.(*models.CustomError)
 		if isCustom {
 			w.WriteHeader(customError.Code)
-			body, _ := json.Marshal(customError)
-			_, _ = w.Write(body)
+			helpers.RespondWithFormat(w, r, customError)
 		} else {
 			w.WriteHeader(http.StatusInternalServerError)
+			helpers.RespondWithFormat(w, r, "Something went wrong")
 		}
 		return
 	}
 
-	Album, err := albums.GetAlbumById(albumId)
+	album, err := albums.GetAlbumById(albumId)
 	if err != nil {
 		logrus.Errorf("error : %s", err.Error())
 		customError, isCustom := err.(*models.CustomError)
 		if isCustom {
 			w.WriteHeader(customError.Code)
-			body, _ := json.Marshal(customError)
-			_, _ = w.Write(body)
+			helpers.RespondWithFormat(w, r, customError)
 		} else {
 			w.WriteHeader(http.StatusInternalServerError)
+			helpers.RespondWithFormat(w, r, "Something went wrong")
 		}
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
-	body, _ := json.Marshal(Album)
-	_, _ = w.Write(body)
-	return
+	helpers.RespondWithFormat(w, r, album)
 }
