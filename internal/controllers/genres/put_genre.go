@@ -2,6 +2,8 @@ package genres
 
 import (
 	"encoding/json"
+	"encoding/xml"
+	"middleware/example/internal/helpers"
 	"middleware/example/internal/models"
 	"middleware/example/internal/services/genres"
 	"net/http"
@@ -22,38 +24,47 @@ import (
 // @Router       /genres/{id} [put]
 func PutGenre(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	genreId, _ := ctx.Value("genreId").(uuid.UUID)
+	genreID, _ := ctx.Value("genreID").(uuid.UUID)
 
 	var newGenre models.Genre
-	err := json.NewDecoder(r.Body).Decode(&newGenre)
-	if err != nil {
-		logrus.Errorf("error : %s", err.Error())
-		customError := &models.CustomError{
-			Message: "cannot parse body",
-			Code:    http.StatusUnprocessableEntity,
+
+	switch r.Header.Get("Content-Type") {
+	case "application/xml":
+		err := xml.NewDecoder(r.Body).Decode(&newGenre)
+		if err != nil {
+			logrus.Errorf("error : %s", err.Error())
+			customError := &models.CustomError{
+				Message: "cannot parse body as XML",
+				Code:    http.StatusUnprocessableEntity,
+			}
+			helpers.RespondWithFormat(w, r, customError)
+			return
 		}
-		w.WriteHeader(customError.Code)
-		body, _ := json.Marshal(customError)
-		_, _ = w.Write(body)
-		return
+	default:
+		err := json.NewDecoder(r.Body).Decode(&newGenre)
+		if err != nil {
+			logrus.Errorf("error : %s", err.Error())
+			customError := &models.CustomError{
+				Message: "cannot parse body as JSON",
+				Code:    http.StatusUnprocessableEntity,
+			}
+			helpers.RespondWithFormat(w, r, customError)
+			return
+		}
 	}
 
-	err = genres.PutGenre(genreId, newGenre)
+	err := genres.PutGenre(genreID, newGenre)
 	if err != nil {
 		logrus.Errorf("error : %s", err.Error())
 		customError, isCustom := err.(*models.CustomError)
 		if isCustom {
-			w.WriteHeader(customError.Code)
-			body, _ := json.Marshal(customError)
-			_, _ = w.Write(body)
+			helpers.RespondWithFormat(w, r, customError)
 		} else {
 			w.WriteHeader(http.StatusInternalServerError)
+			helpers.RespondWithFormat(w, r, "Something went wrong")
 		}
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
-	body, _ := json.Marshal("Genre updated")
-	_, _ = w.Write(body)
-	return
+	helpers.RespondWithFormat(w, r, "Genre updated successfully")
 }
