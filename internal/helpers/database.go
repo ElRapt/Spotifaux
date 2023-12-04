@@ -2,6 +2,10 @@ package helpers
 
 import (
 	"database/sql"
+	"encoding/json"
+	"encoding/xml"
+	"net/http"
+
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/sirupsen/logrus"
 )
@@ -17,5 +21,16 @@ func CloseDB(db *sql.DB) {
 	err := db.Close()
 	if err != nil {
 		logrus.Errorf("error closing db : %s", err.Error())
+	}
+}
+
+func RespondWithFormat(w http.ResponseWriter, r *http.Request, data interface{}) {
+	switch r.Header.Get("Accept") {
+	case "application/xml":
+		w.Header().Set("Content-Type", "application/xml")
+		xml.NewEncoder(w).Encode(data)
+	default:
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(data)
 	}
 }

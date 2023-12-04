@@ -2,13 +2,14 @@ package musics
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
+	"middleware/example/internal/helpers"
+	"middleware/example/internal/models"
+	"net/http"
+
 	"github.com/go-chi/chi"
 	"github.com/gofrs/uuid"
 	"github.com/sirupsen/logrus"
-	"middleware/example/internal/models"
-	"net/http"
 )
 
 func Ctx(next http.Handler) http.Handler {
@@ -20,10 +21,8 @@ func Ctx(next http.Handler) http.Handler {
 				Message: fmt.Sprintf("cannot parse id (%s) as UUID", chi.URLParam(r, "id")),
 				Code:    http.StatusUnprocessableEntity,
 			}
-			w.WriteHeader(customError.Code)
-			body, _ := json.Marshal(customError)
-			_, _ = w.Write(body)
-			return
+			w.WriteHeader(http.StatusInternalServerError)
+			helpers.RespondWithFormat(w, r, customError)
 		}
 
 		ctx := context.WithValue(r.Context(), "musicId", musicId)
