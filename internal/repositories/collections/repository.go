@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/gofrs/uuid"
+	"github.com/sirupsen/logrus"
 )
 
 func GetAllUsers() ([]models.User, error) {
@@ -68,4 +69,28 @@ func GetUserById(userId uuid.UUID) (models.User, error) {
 	}
 
 	return user, nil
+}
+
+func SaveUser(user models.User) error {
+	db, err := helpers.OpenDB()
+	if err != nil {
+		logrus.Errorf("error opening database connection: %s", err.Error())
+		return &models.CustomError{
+			Message: "Error opening database connection",
+			Code:    http.StatusInternalServerError,
+		}
+	}
+	defer db.Close()
+
+	_, err = db.Exec("INSERT INTO users (id, username, email) VALUES ($1, $2, $3)",
+		user.Id.String(), user.Username, user.Email)
+	if err != nil {
+		logrus.Errorf("error inserting user into the database: %s", err.Error())
+		return &models.CustomError{
+			Message: "Error inserting user into the database",
+			Code:    http.StatusInternalServerError,
+		}
+	}
+
+	return nil
 }

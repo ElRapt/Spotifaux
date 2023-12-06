@@ -2,14 +2,15 @@ package main
 
 import (
 	"fmt"
+	collections "middleware/example/internal/controllers/collections"
+	"middleware/example/internal/helpers"
+	_ "middleware/example/internal/models"
+	"net/http"
+
 	"github.com/go-chi/chi/v5"
 	"github.com/gofrs/uuid"
 	_ "github.com/gofrs/uuid"
 	"github.com/sirupsen/logrus"
-	"middleware/example/internal/controllers/collections"
-	"middleware/example/internal/helpers"
-	_ "middleware/example/internal/models"
-	"net/http"
 )
 
 func main() {
@@ -26,6 +27,7 @@ func main() {
 			r.Use(collections.Ctx)
 			r.Get("/", collections.GetUserById)
 		})
+		r.Post("/", collections.CreateUser)
 	})
 
 	logrus.Info("[INFO] Web server started. Now listening on *:8080")
@@ -38,7 +40,6 @@ func init() {
 		logrus.Fatalf("error while opening database : %s", err.Error())
 	}
 
-	// Drop the existing tables if they exist.
 	dropStatements := []string{
 		"DROP TABLE IF EXISTS users;",
 	}
@@ -63,9 +64,7 @@ func init() {
 		}
 	}
 
-	// Insert test users with UUIDs
 	for i := 0; i < 2; i++ {
-		// Generate a new V4 UUID
 		uuid, err := uuid.NewV4()
 		if err != nil {
 			logrus.Fatalf("failed to generate UUID: %s", err.Error())

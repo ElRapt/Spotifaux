@@ -3,7 +3,7 @@ package collections
 import (
 	"encoding/json"
 	"middleware/example/internal/models"
-	"middleware/example/internal/services/collections"
+	collections "middleware/example/internal/services/collections"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -11,11 +11,11 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// GetCollections
+// GetUser
 // @Tags         users
 // @Summary      Get user.
 // @Description  Get user.
-// @Success      200            {array}  models.Users
+// @Success      200            {array}  models.User
 // @Failure      500             "Something went wrong"
 // @Router       /users/{id} [get]
 func GetUserById(w http.ResponseWriter, r *http.Request) {

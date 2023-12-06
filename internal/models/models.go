@@ -1,8 +1,9 @@
 package models
 
 import (
-	"github.com/gofrs/uuid"
 	"time"
+
+	"github.com/gofrs/uuid"
 )
 
 type Collection struct {
@@ -11,8 +12,8 @@ type Collection struct {
 }
 
 type User struct {
-	Id        *uuid.UUID `json:"id"`
-	Username  string     `json:"username"`
-	Email     string     `json:"email"`
-	CreatedAt time.Time  `json:"createdAt"`
+	Id        uuid.UUID `json:"id"`
+	Username  string    `json:"username"`
+	Email     string    `json:"email"`
+	CreatedAt time.Time `json:"createdAt"`
 }
