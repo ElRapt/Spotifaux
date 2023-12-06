@@ -2,30 +2,37 @@ package collections
 
 import (
 	"encoding/json"
-	"github.com/sirupsen/logrus"
 	"middleware/example/internal/models"
 	"middleware/example/internal/services/collections"
 	"net/http"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/gofrs/uuid"
+	"github.com/sirupsen/logrus"
 )
 
 // GetCollections
-// @Tags         collections
-// @Summary      Get collections.
-// @Description  Get collections.
-// @Success      200            {array}  models.Collection
+// @Tags         users
+// @Summary      Get user.
+// @Description  Get user.
+// @Success      200            {array}  models.Users
 // @Failure      500             "Something went wrong"
-// @Router       /collections [get]
-func GetCollections(w http.ResponseWriter, _ *http.Request) {
-	// calling service
-	collections, err := collections.GetAllCollections()
+// @Router       /users/{id} [get]
+func GetUserById(w http.ResponseWriter, r *http.Request) {
+	userIdStr := chi.URLParam(r, "id")
+	userId, err := uuid.FromString(userIdStr)
 	if err != nil {
-		// logging error
+		logrus.Errorf("invalid UUID: %s", err.Error())
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	user, err := collections.GetUserById(userId)
+	if err != nil {
 		logrus.Errorf("error : %s", err.Error())
 		customError, isCustom := err.(*models.CustomError)
 		if isCustom {
-			// writing http code in header
 			w.WriteHeader(customError.Code)
-			// writing error message in body
 			body, _ := json.Marshal(customError)
 			_, _ = w.Write(body)
 		} else {
@@ -35,7 +42,6 @@ func GetCollections(w http.ResponseWriter, _ *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	body, _ := json.Marshal(collections)
+	body, _ := json.Marshal(user)
 	_, _ = w.Write(body)
-	return
 }

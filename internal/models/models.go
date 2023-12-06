@@ -10,7 +10,7 @@ type Collection struct {
 	Content string     `json:"content"`
 }
 
-type Users struct {
+type User struct {
 	Id        *uuid.UUID `json:"id"`
 	Username  string     `json:"username"`
 	Email     string     `json:"email"`

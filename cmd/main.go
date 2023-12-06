@@ -15,19 +15,16 @@ import (
 func main() {
 	r := chi.NewRouter()
 
-	r.Route("/collections", func(r chi.Router) {
-		r.Get("/", collections.GetCollections)
-		r.Route("/{id}", func(r chi.Router) {
-			r.Use(collections.Ctx)
-			r.Get("/", collections.GetCollection)
-		})
+	// TODO: demander à Justine si cette pratique est adaptée
+	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "api/swagger.json")
 	})
 
 	r.Route("/users", func(r chi.Router) {
 		r.Get("/", collections.GetUsers)
 		r.Route("/{id}", func(r chi.Router) {
 			r.Use(collections.Ctx)
-			r.Get("/", collections.GetCollection)
+			r.Get("/", collections.GetUserById)
 		})
 	})
 
@@ -44,7 +41,6 @@ func init() {
 	// Drop the existing tables if they exist.
 	dropStatements := []string{
 		"DROP TABLE IF EXISTS users;",
-		// Add more drop statements for other tables if needed
 	}
 
 	for _, stmt := range dropStatements {

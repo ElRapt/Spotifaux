@@ -1,51 +1,14 @@
 package collections
 
 import (
-	"database/sql"
-	"errors"
-	"github.com/gofrs/uuid"
-	"github.com/sirupsen/logrus"
 	"middleware/example/internal/models"
 	repository "middleware/example/internal/repositories/collections"
-	"net/http"
+
+	"github.com/gofrs/uuid"
+	"github.com/sirupsen/logrus"
 )
 
-func GetAllCollections() ([]models.Collection, error) {
-	var err error
-	// calling repository
-	collections, err := repository.GetAllCollections()
-	// managing errors
-	if err != nil {
-		logrus.Errorf("error retrieving collections : %s", err.Error())
-		return nil, &models.CustomError{
-			Message: "Something went wrong",
-			Code:    500,
-		}
-	}
-
-	return collections, nil
-}
-
-func GetCollectionById(id uuid.UUID) (*models.Collection, error) {
-	collection, err := repository.GetCollectionById(id)
-	if err != nil {
-		if errors.As(err, &sql.ErrNoRows) {
-			return nil, &models.CustomError{
-				Message: "collection not found",
-				Code:    http.StatusNotFound,
-			}
-		}
-		logrus.Errorf("error retrieving collections : %s", err.Error())
-		return nil, &models.CustomError{
-			Message: "Something went wrong",
-			Code:    500,
-		}
-	}
-
-	return collection, err
-}
-
-func GetAllUsers() ([]models.Users, error) {
+func GetAllUsers() ([]models.User, error) {
 	var err error
 	// calling repository
 	users, err := repository.GetAllUsers()
@@ -59,4 +22,20 @@ func GetAllUsers() ([]models.Users, error) {
 	}
 
 	return users, nil
+}
+
+func GetUserById(userId uuid.UUID) (models.User, error) {
+	var err error
+
+	user, err := repository.GetUserById(userId)
+
+	if err != nil {
+		logrus.Errorf("error retrieving user : %s", err.Error())
+		return models.User{}, &models.CustomError{
+			Message: "Something went wrong (user)",
+			Code:    500,
+		}
+	}
+
+	return user, nil
 }

@@ -1,55 +1,16 @@
 package collections
 
 import (
-	"github.com/gofrs/uuid"
+	"database/sql"
 	"middleware/example/internal/helpers"
 	"middleware/example/internal/models"
+
+	"net/http"
+
+	"github.com/gofrs/uuid"
 )
 
-func GetAllCollections() ([]models.Collection, error) {
-	db, err := helpers.OpenDB()
-	if err != nil {
-		return nil, err
-	}
-	rows, err := db.Query("SELECT * FROM collections")
-	helpers.CloseDB(db)
-	if err != nil {
-		return nil, err
-	}
-
-	// parsing datas in object slice
-	collections := []models.Collection{}
-	for rows.Next() {
-		var data models.Collection
-		err = rows.Scan(&data.Id, &data.Content)
-		if err != nil {
-			return nil, err
-		}
-		collections = append(collections, data)
-	}
-	// don't forget to close rows
-	_ = rows.Close()
-
-	return collections, err
-}
-
-func GetCollectionById(id uuid.UUID) (*models.Collection, error) {
-	db, err := helpers.OpenDB()
-	if err != nil {
-		return nil, err
-	}
-	row := db.QueryRow("SELECT * FROM collections WHERE id=?", id.String())
-	helpers.CloseDB(db)
-
-	var collection models.Collection
-	err = row.Scan(&collection.Id, &collection.Content)
-	if err != nil {
-		return nil, err
-	}
-	return &collection, err
-}
-
-func GetAllUsers() ([]models.Users, error) {
+func GetAllUsers() ([]models.User, error) {
 	db, err := helpers.OpenDB()
 	if err != nil {
 		return nil, err
@@ -60,10 +21,9 @@ func GetAllUsers() ([]models.Users, error) {
 		return nil, err
 	}
 
-	// parsing datas in object slice
-	users := []models.Users{}
+	users := []models.User{}
 	for rows.Next() {
-		var data models.Users
+		var data models.User
 		err = rows.Scan(
 			&data.Id,
 			&data.Username,
@@ -76,8 +36,36 @@ func GetAllUsers() ([]models.Users, error) {
 		users = append(users, data)
 	}
 
-	// don't forget to close rows
 	_ = rows.Close()
 
 	return users, err
+}
+
+func GetUserById(userId uuid.UUID) (models.User, error) {
+	db, err := helpers.OpenDB()
+	if err != nil {
+		return models.User{}, err
+	}
+	defer db.Close()
+
+	var user models.User
+
+	err = db.QueryRow("SELECT id, username, email, created_at FROM users WHERE id = $1", userId).Scan(
+		&user.Id,
+		&user.Username,
+		&user.Email,
+		&user.CreatedAt,
+	)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			// This error is tricky to test, got to have a valid uuid but non-existent in the DB
+			return models.User{}, &models.CustomError{
+				Message: "User not found",
+				Code:    http.StatusNotFound,
+			}
+		}
+		return models.User{}, err
+	}
+
+	return user, nil
 }
