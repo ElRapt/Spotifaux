@@ -2,9 +2,10 @@ package musics
 
 import (
 	"database/sql"
-	"github.com/gofrs/uuid"
 	"middleware/example/internal/helpers"
 	"middleware/example/internal/models"
+
+	"github.com/gofrs/uuid"
 )
 
 func GetAllMusics() ([]models.Music, error) {
@@ -43,7 +44,7 @@ func GetMusicById(id uuid.UUID) (*models.Music, error) {
 	err = db.QueryRow("SELECT * FROM Music WHERE id = ?", id).Scan(&m.Id, &m.Title, &m.GenreId, &m.ArtistId, &m.AlbumId)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return nil, nil // Or a custom error indicating not found
+			return nil, nil
 		}
 		return nil, err
 	}

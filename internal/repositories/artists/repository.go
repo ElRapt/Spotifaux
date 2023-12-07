@@ -2,9 +2,10 @@ package artists
 
 import (
 	"database/sql"
-	"github.com/gofrs/uuid"
 	"middleware/example/internal/helpers"
 	"middleware/example/internal/models"
+
+	"github.com/gofrs/uuid"
 )
 
 func GetAllArtists() ([]models.Artist, error) {
@@ -43,7 +44,7 @@ func GetArtistById(id uuid.UUID) (*models.Artist, error) {
 	err = db.QueryRow("SELECT * FROM Artist WHERE id = ?", id).Scan(&a.Id, &a.Name)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return nil, nil // Or a custom error indicating not found
+			return nil, nil
 		}
 		return nil, err
 	}

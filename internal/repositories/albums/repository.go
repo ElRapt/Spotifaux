@@ -44,7 +44,7 @@ func GetAlbumById(id uuid.UUID) (*models.Album, error) {
 	err = db.QueryRow("SELECT * FROM Album WHERE id = ?", id).Scan(&a.Id, &a.Name, &a.ArtistId)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return nil, nil // Or a custom error indicating not found
+			return nil, nil
 		}
 		return nil, err
 	}

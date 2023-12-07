@@ -2,9 +2,10 @@ package genres
 
 import (
 	"database/sql"
-	"github.com/gofrs/uuid"
 	"middleware/example/internal/helpers"
 	"middleware/example/internal/models"
+
+	"github.com/gofrs/uuid"
 )
 
 func GetAllGenres() ([]models.Genre, error) {
@@ -43,7 +44,7 @@ func GetGenreById(id uuid.UUID) (*models.Genre, error) {
 	err = db.QueryRow("SELECT * FROM Genre WHERE id = ?", id).Scan(&g.Id, &g.Name)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return nil, nil // Or a custom error indicating not found
+			return nil, nil
 		}
 		return nil, err
 	}
