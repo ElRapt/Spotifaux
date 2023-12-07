@@ -1,7 +1,7 @@
 package users
 
 import (
-	"encoding/json"
+	"middleware/example/internal/helpers"
 	"middleware/example/internal/models"
 	users "middleware/example/internal/services/users"
 	"net/http"
@@ -16,24 +16,22 @@ import (
 // @Success      200            {array}  models.User
 // @Failure      500             "Something went wrong"
 // @Router       /users [get]
-func GetUsers(w http.ResponseWriter, _ *http.Request) {
-	// calling service
+func GetUsers(w http.ResponseWriter, r *http.Request) {
 	users, err := users.GetAllUsers()
 	if err != nil {
 		logrus.Errorf("error : %s", err.Error())
 		customError, isCustom := err.(*models.CustomError)
 		if isCustom {
 			w.WriteHeader(customError.Code)
-			body, _ := json.Marshal(customError)
-			_, _ = w.Write(body)
+			helpers.RespondWithFormat(w, r, customError)
 		} else {
 			w.WriteHeader(http.StatusInternalServerError)
+			helpers.RespondWithFormat(w, r, map[string]string{"error": "Internal Server Error"})
 		}
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
-	body, _ := json.Marshal(users)
-	_, _ = w.Write(body)
+	helpers.RespondWithFormat(w, r, users)
 	return
 }

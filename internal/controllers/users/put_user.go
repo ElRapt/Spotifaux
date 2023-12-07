@@ -1,8 +1,8 @@
 package users
 
 import (
-	"encoding/json"
 	"io"
+	"middleware/example/internal/helpers"
 	users "middleware/example/internal/services/users"
 	"net/http"
 
@@ -18,6 +18,7 @@ import (
 // @Success      201            {array}  models.User
 // @Failure      204              "Something went wrong"
 // @Router       /users/{id} [put]
+
 func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	userIdStr := chi.URLParam(r, "id")
 	userId, err := uuid.FromString(userIdStr)
@@ -45,6 +46,5 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	responseBody, _ := json.Marshal(updatedUser)
-	_, _ = w.Write(responseBody)
+	helpers.RespondWithFormat(w, r, updatedUser)
 }

@@ -1,8 +1,8 @@
 package users
 
 import (
-	"encoding/json"
 	"io"
+	"middleware/example/internal/helpers"
 	users "middleware/example/internal/services/users"
 	"net/http"
 
@@ -35,6 +35,5 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusCreated)
-	responseBody, _ := json.Marshal(newUser)
-	_, _ = w.Write(responseBody)
+	helpers.RespondWithFormat(w, r, newUser)
 }

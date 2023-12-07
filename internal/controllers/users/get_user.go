@@ -1,7 +1,7 @@
 package users
 
 import (
-	"encoding/json"
+	"middleware/example/internal/helpers"
 	"middleware/example/internal/models"
 	users "middleware/example/internal/services/users"
 	"net/http"
@@ -33,15 +33,15 @@ func GetUserById(w http.ResponseWriter, r *http.Request) {
 		customError, isCustom := err.(*models.CustomError)
 		if isCustom {
 			w.WriteHeader(customError.Code)
-			body, _ := json.Marshal(customError)
-			_, _ = w.Write(body)
+			helpers.RespondWithFormat(w, r, customError)
 		} else {
 			w.WriteHeader(http.StatusInternalServerError)
+			helpers.RespondWithFormat(w, r, map[string]string{"error": "Internal Server Error"})
 		}
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
-	body, _ := json.Marshal(user)
-	_, _ = w.Write(body)
+	helpers.RespondWithFormat(w, r, user)
+	return
 }
