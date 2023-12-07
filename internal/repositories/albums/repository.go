@@ -74,7 +74,7 @@ func PutAlbum(id uuid.UUID, updatedAlbum models.Album) error {
 	}
 	defer helpers.CloseDB(db)
 
-	_, err = db.Exec("UPDATE Album SET name = ?, artistId = ? WHERE id = ?", updatedAlbum.Name, updatedAlbum.ArtistId, id)
+	_, err = db.Exec("UPDATE Album SET name = ? WHERE id = ?", updatedAlbum.Name, id)
 	return err
 }
 

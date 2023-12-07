@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"middleware/example/internal/helpers"
 	"middleware/example/internal/models"
+	"strings"
 
 	"github.com/gofrs/uuid"
 )
@@ -74,7 +75,34 @@ func PutMusic(id uuid.UUID, updatedMusic models.Music) error {
 	}
 	defer helpers.CloseDB(db)
 
-	_, err = db.Exec("UPDATE Music SET title = ?, genreId = ?, artistId = ?, albumId = ? WHERE id = ?", updatedMusic.Title, updatedMusic.GenreId, updatedMusic.ArtistId, updatedMusic.AlbumId, id)
+	var queryParts []string
+	var params []interface{}
+
+	if updatedMusic.Title != "" {
+		queryParts = append(queryParts, "title = ?")
+		params = append(params, updatedMusic.Title)
+	}
+	if updatedMusic.GenreId != uuid.Nil {
+		queryParts = append(queryParts, "genreId = ?")
+		params = append(params, updatedMusic.GenreId)
+	}
+	if updatedMusic.ArtistId != uuid.Nil {
+		queryParts = append(queryParts, "artistId = ?")
+		params = append(params, updatedMusic.ArtistId)
+	}
+	if updatedMusic.AlbumId != uuid.Nil {
+		queryParts = append(queryParts, "albumId = ?")
+		params = append(params, updatedMusic.AlbumId)
+	}
+
+	if len(queryParts) == 0 {
+		return nil
+	}
+
+	queryString := "UPDATE Music SET " + strings.Join(queryParts, ", ") + " WHERE id = ?"
+	params = append(params, id)
+
+	_, err = db.Exec(queryString, params...)
 	return err
 }
 
