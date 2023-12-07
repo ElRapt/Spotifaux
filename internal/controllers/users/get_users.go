@@ -1,33 +1,24 @@
-package collections
+package users
 
 import (
 	"encoding/json"
 	"middleware/example/internal/models"
-	collections "middleware/example/internal/services/collections"
+	users "middleware/example/internal/services/users"
 	"net/http"
 
-	"github.com/go-chi/chi/v5"
-	"github.com/gofrs/uuid"
 	"github.com/sirupsen/logrus"
 )
 
-// GetUser
+// GetUsers
 // @Tags         users
-// @Summary      Get user.
-// @Description  Get user.
+// @Summary      Get users.
+// @Description  Get users.
 // @Success      200            {array}  models.User
 // @Failure      500             "Something went wrong"
-// @Router       /users/{id} [get]
-func GetUserById(w http.ResponseWriter, r *http.Request) {
-	userIdStr := chi.URLParam(r, "id")
-	userId, err := uuid.FromString(userIdStr)
-	if err != nil {
-		logrus.Errorf("invalid UUID: %s", err.Error())
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
-
-	user, err := collections.GetUserById(userId)
+// @Router       /users [get]
+func GetUsers(w http.ResponseWriter, _ *http.Request) {
+	// calling service
+	users, err := users.GetAllUsers()
 	if err != nil {
 		logrus.Errorf("error : %s", err.Error())
 		customError, isCustom := err.(*models.CustomError)
@@ -42,6 +33,7 @@ func GetUserById(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
-	body, _ := json.Marshal(user)
+	body, _ := json.Marshal(users)
 	_, _ = w.Write(body)
+	return
 }

@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	collections "middleware/example/internal/controllers/collections"
+	"middleware/example/internal/controllers/users"
 	"middleware/example/internal/helpers"
 	_ "middleware/example/internal/models"
 	"net/http"
@@ -16,18 +16,18 @@ import (
 func main() {
 	r := chi.NewRouter()
 
-	// TODO: demander à Justine si cette pratique est adaptée
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, "api/swagger.json")
 	})
 
 	r.Route("/users", func(r chi.Router) {
-		r.Get("/", collections.GetUsers)
+		r.Get("/", users.GetUsers)
 		r.Route("/{id}", func(r chi.Router) {
-			r.Use(collections.Ctx)
-			r.Get("/", collections.GetUserById)
+			r.Use(users.Ctx)
+			r.Get("/", users.GetUserById)
 		})
-		r.Post("/", collections.CreateUser)
+		r.Post("/", users.CreateUser)
+		r.Put("/{id}", users.UpdateUser)
 	})
 
 	logrus.Info("[INFO] Web server started. Now listening on *:8080")

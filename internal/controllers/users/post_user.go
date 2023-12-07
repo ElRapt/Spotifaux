@@ -1,9 +1,9 @@
-package collections
+package users
 
 import (
 	"encoding/json"
 	"io"
-	collections "middleware/example/internal/services/collections"
+	users "middleware/example/internal/services/users"
 	"net/http"
 
 	"github.com/sirupsen/logrus"
@@ -13,11 +13,10 @@ import (
 // @Tags         users
 // @Summary      Post user.
 // @Description  Create a user.
-// @Success      200            {array}  models.User
-// @Failure      500             "Something went wrong"
+// @Success      201 User created           {array}  models.User
+// @Failure      204 No content             "Something went wrong"
 // @Router       /users [post]
 func CreateUser(w http.ResponseWriter, r *http.Request) {
-	// Read the request body as a string
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		logrus.Errorf("error reading request body: %s", err.Error())
@@ -28,7 +27,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	bodyStr := string(body)
 
-	newUser, err := collections.CreateUser(bodyStr)
+	newUser, err := users.CreateUser(bodyStr)
 	if err != nil {
 		logrus.Errorf("error creating user: %s", err.Error())
 		w.WriteHeader(http.StatusInternalServerError)

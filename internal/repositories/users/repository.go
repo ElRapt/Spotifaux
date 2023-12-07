@@ -1,7 +1,8 @@
-package collections
+package users
 
 import (
 	"database/sql"
+	"errors"
 	"middleware/example/internal/helpers"
 	"middleware/example/internal/models"
 
@@ -93,4 +94,46 @@ func SaveUser(user models.User) error {
 	}
 
 	return nil
+}
+
+func UpdateUser(userId uuid.UUID, username string, email string) (models.User, error) {
+	db, err := helpers.OpenDB()
+	if err != nil {
+		return models.User{}, err
+	}
+	defer db.Close()
+
+	var updateQuery string
+	var args []interface{}
+
+	if username != "" && email != "" {
+		updateQuery = "UPDATE users SET username = $1, email = $2 WHERE id = $3"
+		args = append(args, username, email, userId)
+	} else if username != "" {
+		updateQuery = "UPDATE users SET username = $1 WHERE id = $2"
+		args = append(args, username, userId)
+	} else if email != "" {
+		updateQuery = "UPDATE users SET email = $1 WHERE id = $2"
+		args = append(args, email, userId)
+	} else {
+		return models.User{}, errors.New("no fields to update")
+	}
+
+	_, err = db.Exec(updateQuery, args...)
+	if err != nil {
+		return models.User{}, err
+	}
+
+	var user models.User
+	err = db.QueryRow("SELECT id, username, email, created_at FROM users WHERE id = $1", userId).Scan(
+		&user.Id,
+		&user.Username,
+		&user.Email,
+		&user.CreatedAt,
+	)
+	if err != nil {
+		return models.User{}, err
+	}
+
+	return user, nil
 }
