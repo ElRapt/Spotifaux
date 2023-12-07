@@ -4,9 +4,9 @@
 from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
 from apispec_webframeworks.flask import FlaskPlugin
-from src.schemas.user import *
-from src.schemas.user_auth import *
-from src.schemas.errors import *
+from schemas.user import *
+from schemas.user_auth import *
+from schemas.errors import *
 
 
 # Create an APISpec

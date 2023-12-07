@@ -1,6 +1,6 @@
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash
-from src.helpers import db
+from helpers import db
 
 
 # modèle de donnée pour la base de donnée utilisateur

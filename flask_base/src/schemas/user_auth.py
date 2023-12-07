@@ -1,5 +1,5 @@
 from marshmallow import Schema, fields, validates_schema, ValidationError
-from src.schemas.user import BaseUserSchema
+from schemas.user import BaseUserSchema
 
 
 # Schéma utilisateur de connexion

@@ -2,9 +2,9 @@ import os
 
 from flask_login import LoginManager
 
-from src.helpers import db, app
-from src.models.user import User
-from src.schemas.errors import UnauthorizedSchema
+from helpers import db, app
+from models.user import User
+from schemas.errors import UnauthorizedSchema
 
 
 def config_app():
