@@ -137,3 +137,35 @@ func UpdateUser(userId uuid.UUID, username string, email string) (models.User, e
 
 	return user, nil
 }
+
+func DeleteUser(userId uuid.UUID) (models.User, error) {
+	db, err := helpers.OpenDB()
+	if err != nil {
+		return models.User{}, err
+	}
+	defer db.Close()
+
+	var user models.User
+	err = db.QueryRow("SELECT id, username, email, created_at FROM users WHERE id = $1", userId).Scan(
+		&user.Id,
+		&user.Username,
+		&user.Email,
+		&user.CreatedAt,
+	)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return models.User{}, &models.CustomError{
+				Message: "User not found",
+				Code:    http.StatusNotFound,
+			}
+		}
+		return models.User{}, err
+	}
+
+	_, err = db.Exec("DELETE FROM users WHERE id = $1", userId)
+	if err != nil {
+		return models.User{}, err
+	}
+
+	return user, nil
+}

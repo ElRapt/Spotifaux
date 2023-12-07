@@ -28,6 +28,7 @@ func main() {
 		})
 		r.Post("/", users.CreateUser)
 		r.Put("/{id}", users.UpdateUser)
+		r.Delete("/{id}", users.DeleteUser)
 	})
 
 	logrus.Info("[INFO] Web server started. Now listening on *:8080")
@@ -39,7 +40,7 @@ func init() {
 	if err != nil {
 		logrus.Fatalf("error while opening database : %s", err.Error())
 	}
-
+	// TODO: delete that part when doing Flask
 	dropStatements := []string{
 		"DROP TABLE IF EXISTS users;",
 	}
