@@ -72,7 +72,7 @@ func GetUserById(userId uuid.UUID) (models.User, error) {
 	return user, nil
 }
 
-func SaveUser(user models.User) error {
+func CreateUser(user models.User) error {
 	db, err := helpers.OpenDB()
 	if err != nil {
 		logrus.Errorf("error opening database connection: %s", err.Error())

@@ -69,7 +69,7 @@ func CreateUser(body string) (models.User, error) {
 		Email:    email,
 	}
 
-	err2 := repository.SaveUser(newUser)
+	err2 := repository.CreateUser(newUser)
 	if err2 != nil {
 		logrus.Errorf("error creating user: %s", err.Error())
 		return models.User{}, err2
