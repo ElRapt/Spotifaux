@@ -13,6 +13,8 @@ import (
 // @Tags         users
 // @Summary      Get users.
 // @Description  Get users.
+// @Produce      json
+// @Produce      xml
 // @Success      200            {array}  models.User
 // @Failure      500             "Something went wrong"
 // @Router       /users [get]

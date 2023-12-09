@@ -11,12 +11,17 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// GetUser
+// GetUserById
 // @Tags         users
 // @Summary      Get user.
-// @Description  Get user.
+// @Description  Get user by ID.
+// @Produce      json
+// @Produce      xml
+// @Param id path string true "User ID"
 // @Success      200            {array}  models.User
-// @Failure      500             "Something went wrong"
+// @Failure      400            "Bad Request"
+// @Failure      404            "User Not Found"
+// @Failure      500            "Something went wrong"
 // @Router       /users/{id} [get]
 func GetUserById(w http.ResponseWriter, r *http.Request) {
 	userIdStr := chi.URLParam(r, "id")
@@ -36,7 +41,7 @@ func GetUserById(w http.ResponseWriter, r *http.Request) {
 			helpers.RespondWithFormat(w, r, customError)
 		} else {
 			w.WriteHeader(http.StatusInternalServerError)
-			helpers.RespondWithFormat(w, r, map[string]string{"error": "Internal Server Error"})
+			helpers.RespondWithFormat(w, r, map[string]string{"error": "Something went wrong"})
 		}
 		return
 	}

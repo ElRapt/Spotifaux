@@ -12,9 +12,15 @@ import (
 // CreateUser
 // @Tags         users
 // @Summary      Post user.
-// @Description  Create a user.
-// @Success      201 User created           {array}  models.User
-// @Failure      204 No content             "Something went wrong"
+// @Description  Create a new user with provided information.
+// @Accept       json
+// @Produce      json
+// @Produce      xml
+// @Param        user  body      models.User  true  "User Data"
+// @Success      201            "User Created"
+// @Failure      400            "Bad Request"
+// @Failure      409            "Conflict"
+// @Failure      500            "Something went wrong"
 // @Router       /users [post]
 func CreateUser(w http.ResponseWriter, r *http.Request) {
 	body, err := io.ReadAll(r.Body)

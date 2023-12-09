@@ -13,12 +13,16 @@ import (
 
 // UpdateUser
 // @Tags         users
-// @Summary      Modify user.
-// @Description  Modify a user.
-// @Success      201            {array}  models.User
-// @Failure      204              "Something went wrong"
+// @Summary      Update user.
+// @Description  Update an existing user's information.
+// @Accept       json
+// @Produce      json
+// @Produce      xml
+// @Param        id    path      string                true  "User ID"
+// @Param        user  body      models.User  true  "User Data"
+// @Success      200            "User Updated"
+// @Failure      500            "Something went wrong"
 // @Router       /users/{id} [put]
-
 func UpdateUser(w http.ResponseWriter, r *http.Request) {
 	userIdStr := chi.URLParam(r, "id")
 	userId, err := uuid.FromString(userIdStr)

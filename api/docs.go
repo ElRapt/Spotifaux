@@ -21,6 +21,10 @@ const docTemplate = `{
         "/users": {
             "get": {
                 "description": "Get users.",
+                "produces": [
+                    "application/json",
+                    "text/xml"
+                ],
                 "tags": [
                     "users"
                 ],
@@ -31,9 +35,48 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/models.Collection"
+                                "$ref": "#/definitions/models.User"
                             }
                         }
+                    },
+                    "500": {
+                        "description": "Something went wrong"
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new user with provided information.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "text/xml"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Post user.",
+                "parameters": [
+                    {
+                        "description": "User Data",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "User Created"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "409": {
+                        "description": "Conflict"
                     },
                     "500": {
                         "description": "Something went wrong"
@@ -43,15 +86,19 @@ const docTemplate = `{
         },
         "/users/{id}": {
             "get": {
-                "description": "Get a collection.",
+                "description": "Get user by ID.",
+                "produces": [
+                    "application/json",
+                    "text/xml"
+                ],
                 "tags": [
                     "users"
                 ],
-                "summary": "Get a collection.",
+                "summary": "Get user.",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Collection UUID formatted ID",
+                        "description": "User ID",
                         "name": "id",
                         "in": "path",
                         "required": true
@@ -61,27 +108,113 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Collection"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.User"
+                            }
                         }
                     },
-                    "422": {
-                        "description": "Cannot parse id"
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "User Not Found"
                     },
                     "500": {
                         "description": "Something went wrong"
+                    }
+                }
+            },
+            "put": {
+                "description": "Update an existing user's information.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json",
+                    "text/xml"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Update user.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "User Data",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User Updated"
+                    },
+                    "500": {
+                        "description": "Something went wrong"
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete a user by their unique ID.",
+                "produces": [
+                    "application/json",
+                    "text/xml"
+                ],
+                "tags": [
+                    "users"
+                ],
+                "summary": "Delete user.",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User Deleted"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "404": {
+                        "description": "User Not Found"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
                     }
                 }
             }
         }
     },
     "definitions": {
-        "models.Collection": {
+        "models.User": {
             "type": "object",
             "properties": {
-                "content": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "email": {
                     "type": "string"
                 },
                 "id": {
+                    "type": "string"
+                },
+                "username": {
                     "type": "string"
                 }
             }

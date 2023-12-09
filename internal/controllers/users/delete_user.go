@@ -14,10 +14,15 @@ import (
 // DeleteUser
 // @Tags         users
 // @Summary      Delete user.
-// @Description  Delete user.
-// @Success      200            {array}  models.User
-// @Failure      204             "Something went wrong"
-// @Router       /users/{id} [get]
+// @Description  Delete a user by their unique ID.
+// @Produce      json
+// @Produce      xml
+// @Param        id    path      string  true  "User ID"
+// @Success      200            "User Deleted"
+// @Failure      400            "Bad Request"
+// @Failure      404            "User Not Found"
+// @Failure      500            "Internal Server Error"
+// @Router       /users/{id} [delete]
 func DeleteUser(w http.ResponseWriter, r *http.Request) {
 	userIdStr := chi.URLParam(r, "id")
 	userId, err := uuid.FromString(userIdStr)
