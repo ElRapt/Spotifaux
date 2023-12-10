@@ -1,11 +1,11 @@
 package internal
 
-// @title        middleware/example
+// @title        Spotifaux
 // @version      1.0.0
-// @description  API to manage collections.
+// @description  Spotifaux's renowned API.
 
-// @contact.name   Justine Bachelard.
-// @contact.email  justine.bachelard@ext.uca.fr
+// @contact.name   Moran Toulisse.
+// @contact.email  moran.toulisse@etu.uca.fr
 
 // @schemes   http
 // @BasePath  /

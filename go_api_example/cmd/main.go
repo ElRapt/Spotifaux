@@ -1,22 +1,27 @@
 package main
 
 import (
-	"github.com/go-chi/chi/v5"
-	"github.com/sirupsen/logrus"
-	"middleware/example/internal/controllers/collections"
+	"middleware/example/internal/controllers/ratings"
 	"middleware/example/internal/helpers"
 	_ "middleware/example/internal/models"
 	"net/http"
+
+	"github.com/go-chi/chi"
+	"github.com/sirupsen/logrus"
 )
 
 func main() {
 	r := chi.NewRouter()
 
-	r.Route("/collections", func(r chi.Router) {
-		r.Get("/", collections.GetCollections)
+	// Route pour les notations (ratings)
+	r.Route("/ratings", func(r chi.Router) {
+		r.Get("/", ratings.GetRatings)
+		r.Post("/", ratings.PostRating)
 		r.Route("/{id}", func(r chi.Router) {
-			r.Use(collections.Ctx)
-			r.Get("/", collections.GetCollection)
+			r.Use(ratings.Ctx)
+			r.Get("/", ratings.GetRating)
+			r.Delete("/", ratings.DeleteRating)
+			r.Put("/", ratings.PutRating)
 		})
 	})
 
@@ -27,17 +32,25 @@ func main() {
 func init() {
 	db, err := helpers.OpenDB()
 	if err != nil {
-		logrus.Fatalf("error while opening database : %s", err.Error())
+		logrus.Fatalf("error while opening database: %s", err.Error())
 	}
 	schemes := []string{
-		`CREATE TABLE IF NOT EXISTS collections (
-			id VARCHAR(255) PRIMARY KEY NOT NULL UNIQUE,
-			content VARCHAR(255) NOT NULL
-		);`,
+		// Ajoutez ici le schéma de création de la table pour les notations
+		`
+        CREATE TABLE IF NOT EXISTS Rating (
+            id CHAR(36) PRIMARY KEY,
+            userId CHAR(36) NOT NULL,
+            songId CHAR(36) NOT NULL,
+            rating INT NOT NULL,
+            comment TEXT,
+            FOREIGN KEY (userId) REFERENCES User(id),
+            FOREIGN KEY (songId) REFERENCES Song(id)
+        );
+        `,
 	}
 	for _, scheme := range schemes {
 		if _, err := db.Exec(scheme); err != nil {
-			logrus.Fatalln("Could not generate table ! Error was : " + err.Error())
+			logrus.Fatalln("Could not generate table! Error was: " + err.Error())
 		}
 	}
 	helpers.CloseDB(db)

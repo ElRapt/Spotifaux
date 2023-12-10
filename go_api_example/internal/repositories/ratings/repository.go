@@ -1,50 +1,90 @@
-package collections
+package ratings
 
 import (
-	"github.com/gofrs/uuid"
+	"database/sql"
 	"middleware/example/internal/helpers"
 	"middleware/example/internal/models"
+
+	"github.com/gofrs/uuid"
 )
 
-func GetAllCollections() ([]models.Collection, error) {
+func GetAllRatings() ([]models.Rating, error) {
 	db, err := helpers.OpenDB()
 	if err != nil {
 		return nil, err
 	}
-	rows, err := db.Query("SELECT * FROM collections")
-	helpers.CloseDB(db)
+	defer helpers.CloseDB(db)
+
+	var ratings []models.Rating
+	rows, err := db.Query("SELECT * FROM ratings")
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
-	// parsing datas in object slice
-	collections := []models.Collection{}
 	for rows.Next() {
-		var data models.Collection
-		err = rows.Scan(&data.Id, &data.Content)
-		if err != nil {
+		var r models.Rating
+		if err := rows.Scan(&r.ID, &r.UserID, &r.SongID, &r.Rating, &r.Comment); err != nil {
 			return nil, err
 		}
-		collections = append(collections, data)
+		ratings = append(ratings, r)
 	}
-	// don't forget to close rows
-	_ = rows.Close()
 
-	return collections, err
+	return ratings, nil
 }
 
-func GetCollectionById(id uuid.UUID) (*models.Collection, error) {
+func GetRatingById(id uuid.UUID) (*models.Rating, error) {
 	db, err := helpers.OpenDB()
 	if err != nil {
 		return nil, err
 	}
-	row := db.QueryRow("SELECT * FROM collections WHERE id=?", id.String())
-	helpers.CloseDB(db)
+	defer helpers.CloseDB(db)
 
-	var collection models.Collection
-	err = row.Scan(&collection.Id, &collection.Content)
+	var r models.Rating
+	err = db.QueryRow("SELECT * FROM ratings WHERE id = ?", id).Scan(&r.ID, &r.UserID, &r.SongID, &r.Rating, &r.Comment)
 	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, nil
+		}
 		return nil, err
 	}
-	return &collection, err
+
+	return &r, nil
+}
+
+func PostRating(newRating models.Rating) (uuid.UUID, error) {
+	db, err := helpers.OpenDB()
+	if err != nil {
+		return uuid.Nil, err
+	}
+	defer helpers.CloseDB(db)
+
+	_, err = db.Exec("INSERT INTO ratings (id, user_id, song_id, rating, comment) VALUES (?, ?, ?, ?, ?)", newRating.ID, newRating.UserID, newRating.SongID, newRating.Rating, newRating.Comment)
+	if err != nil {
+		return uuid.Nil, err
+	}
+
+	return newRating.ID, nil
+}
+
+func PutRating(id uuid.UUID, updatedRating models.Rating) error {
+	db, err := helpers.OpenDB()
+	if err != nil {
+		return err
+	}
+	defer helpers.CloseDB(db)
+
+	_, err = db.Exec("UPDATE ratings SET rating = ?, comment = ? WHERE id = ?", updatedRating.Rating, updatedRating.Comment, id)
+	return err
+}
+
+func DeleteRating(id uuid.UUID) error {
+	db, err := helpers.OpenDB()
+	if err != nil {
+		return err
+	}
+	defer helpers.CloseDB(db)
+
+	_, err = db.Exec("DELETE FROM ratings WHERE id = ?", id)
+	return err
 }

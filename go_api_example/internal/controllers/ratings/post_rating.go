@@ -8,24 +8,18 @@ import (
 	"middleware/example/internal/services/ratings"
 	"net/http"
 
-	"github.com/gofrs/uuid"
 	"github.com/sirupsen/logrus"
 )
 
-// PutRating
+// PostRating
 // @Tags         ratings
-// @Summary      Update a Rating.
-// @Description  Update a Rating.
-// @Param        id           	path      string  true  "Rating UUID formatted ID"
+// @Summary      Create a Rating.
+// @Description  Create a Rating.
 // @Param        body         	body      string  true  "Rating object"
-// @Success      200            {object}  string
-// @Failure      422            "Cannot parse id"
+// @Success      200            {object}  models.Rating
 // @Failure      500            "Something went wrong"
-// @Router       /ratings/{id} [put]
-func PutRating(w http.ResponseWriter, r *http.Request) {
-	ctx := r.Context()
-	ratingId, _ := ctx.Value("ratingId").(uuid.UUID)
-
+// @Router       /ratings [post]
+func PostRating(w http.ResponseWriter, r *http.Request) {
 	var newRating models.Rating
 
 	switch r.Header.Get("Content-Type") {
@@ -53,11 +47,12 @@ func PutRating(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	err := ratings.PutRating(ratingId, newRating)
+	ratingId, err := ratings.PostRating(newRating)
 	if err != nil {
 		logrus.Errorf("error: %s", err.Error())
 		customError, isCustom := err.(*models.CustomError)
 		if isCustom {
+			w.WriteHeader(customError.Code)
 			helpers.RespondWithFormat(w, r, customError)
 		} else {
 			w.WriteHeader(http.StatusInternalServerError)
@@ -66,5 +61,19 @@ func PutRating(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	helpers.RespondWithFormat(w, r, "Rating updated successfully")
+	rating, err := ratings.GetRatingById(ratingId)
+	if err != nil {
+		logrus.Errorf("error: %s", err.Error())
+		customError, isCustom := err.(*models.CustomError)
+		if isCustom {
+			w.WriteHeader(customError.Code)
+			helpers.RespondWithFormat(w, r, customError)
+		} else {
+			w.WriteHeader(http.StatusInternalServerError)
+			helpers.RespondWithFormat(w, r, "Something went wrong")
+		}
+		return
+	}
+
+	helpers.RespondWithFormat(w, r, rating)
 }

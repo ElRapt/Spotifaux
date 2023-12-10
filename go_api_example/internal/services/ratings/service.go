@@ -1,45 +1,80 @@
-package collections
+package ratings
 
 import (
 	"database/sql"
+	"errors"
+	"middleware/example/internal/models"
+	repository "middleware/example/internal/repositories/ratings"
+	"net/http"
+
 	"github.com/gofrs/uuid"
 	"github.com/sirupsen/logrus"
-	"middleware/example/internal/models"
-	repository "middleware/example/internal/repositories/collections"
-	"net/http"
 )
 
-func GetAllCollections() ([]models.Collection, error) {
-	var err error
-	// calling repository
-	collections, err := repository.GetAllCollections()
-	// managing errors
+func GetAllRatings() ([]models.Rating, error) {
+	ratings, err := repository.GetAllRatings()
 	if err != nil {
-		logrus.Errorf("error retrieving collections : %s", err.Error())
+		logrus.Errorf("error retrieving ratings: %s", err.Error())
 		return nil, &models.CustomError{
 			Message: "Something went wrong",
-			Code:    500,
+			Code:    http.StatusInternalServerError,
 		}
 	}
 
-	return collections, nil
+	return ratings, nil
 }
 
-func GetCollectionById(id uuid.UUID) (*models.Collection, error) {
-	collection, err := repository.GetCollectionById(id)
+func GetRatingById(id uuid.UUID) (*models.Rating, error) {
+	rating, err := repository.GetRatingById(id)
 	if err != nil {
-		if err.Error() == sql.ErrNoRows.Error() {
+		if errors.As(err, &sql.ErrNoRows) {
 			return nil, &models.CustomError{
-				Message: "collection not found",
+				Message: "Rating not found",
 				Code:    http.StatusNotFound,
 			}
 		}
-		logrus.Errorf("error retrieving collections : %s", err.Error())
+		logrus.Errorf("error retrieving rating: %s", err.Error())
 		return nil, &models.CustomError{
 			Message: "Something went wrong",
-			Code:    500,
+			Code:    http.StatusInternalServerError,
 		}
 	}
 
-	return collection, err
+	return rating, nil
+}
+
+func PostRating(newRating models.Rating) (uuid.UUID, error) {
+	ratingId, err := repository.PostRating(newRating)
+	if err != nil {
+		logrus.Errorf("error posting rating: %s", err.Error())
+		return uuid.Nil, &models.CustomError{
+			Message: "Something went wrong",
+			Code:    http.StatusInternalServerError,
+		}
+	}
+	return ratingId, nil
+}
+
+func PutRating(id uuid.UUID, newRating models.Rating) error {
+	err := repository.PutRating(id, newRating)
+	if err != nil {
+		logrus.Errorf("error updating rating: %s", err.Error())
+		return &models.CustomError{
+			Message: "Something went wrong",
+			Code:    http.StatusInternalServerError,
+		}
+	}
+	return nil
+}
+
+func DeleteRating(id uuid.UUID) error {
+	err := repository.DeleteRating(id)
+	if err != nil {
+		logrus.Errorf("error deleting rating: %s", err.Error())
+		return &models.CustomError{
+			Message: "Something went wrong",
+			Code:    http.StatusInternalServerError,
+		}
+	}
+	return nil
 }

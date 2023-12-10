@@ -1,41 +1,35 @@
-package collections
+package ratings
 
 import (
-	"encoding/json"
-	"github.com/sirupsen/logrus"
+	"middleware/example/internal/helpers"
 	"middleware/example/internal/models"
-	"middleware/example/internal/services/collections"
+	"middleware/example/internal/services/ratings"
 	"net/http"
+
+	"github.com/sirupsen/logrus"
 )
 
-// GetCollections
-// @Tags         collections
-// @Summary      Get collections.
-// @Description  Get collections.
-// @Success      200            {array}  models.Collection
-// @Failure      500             "Something went wrong"
-// @Router       /collections [get]
-func GetCollections(w http.ResponseWriter, _ *http.Request) {
-	// calling service
-	collections, err := collections.GetAllCollections()
+// GetRatings
+// @Tags         ratings
+// @Summary      Get ratings.
+// @Description  Get ratings.
+// @Success      200            {array}  models.Rating
+// @Failure      500            "Something went wrong"
+// @Router       /ratings [get]
+func GetRatings(w http.ResponseWriter, r *http.Request) {
+	ratings, err := ratings.GetAllRatings()
 	if err != nil {
-		// logging error
-		logrus.Errorf("error : %s", err.Error())
+		logrus.Errorf("error: %s", err.Error())
 		customError, isCustom := err.(*models.CustomError)
 		if isCustom {
-			// writing http code in header
 			w.WriteHeader(customError.Code)
-			// writing error message in body
-			body, _ := json.Marshal(customError)
-			_, _ = w.Write(body)
+			helpers.RespondWithFormat(w, r, customError)
 		} else {
 			w.WriteHeader(http.StatusInternalServerError)
+			helpers.RespondWithFormat(w, r, "Something went wrong")
 		}
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
-	body, _ := json.Marshal(collections)
-	_, _ = w.Write(body)
-	return
+	helpers.RespondWithFormat(w, r, ratings)
 }
