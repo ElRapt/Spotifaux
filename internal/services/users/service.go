@@ -1,8 +1,6 @@
 package users
 
 import (
-	"encoding/json"
-	"errors"
 	"middleware/example/internal/models"
 	repository "middleware/example/internal/repositories/users"
 
@@ -40,23 +38,7 @@ func GetUserById(userId uuid.UUID) (models.User, error) {
 	return user, nil
 }
 
-func CreateUser(body string) (models.User, error) {
-	var requestBody map[string]interface{}
-
-	if err := json.Unmarshal([]byte(body), &requestBody); err != nil {
-		logrus.Errorf("error decoding JSON: %s", err.Error())
-		return models.User{}, err
-	}
-
-	username, ok := requestBody["username"].(string)
-	if !ok {
-		return models.User{}, errors.New("username field is missing or not a string")
-	}
-
-	email, ok := requestBody["email"].(string)
-	if !ok {
-		return models.User{}, errors.New("email field is missing or not a string")
-	}
+func CreateUser(partialUser models.User) (models.User, error) {
 
 	userId, err := uuid.NewV4()
 	if err != nil {
@@ -65,8 +47,8 @@ func CreateUser(body string) (models.User, error) {
 
 	newUser := models.User{
 		Id:       userId,
-		Username: username,
-		Email:    email,
+		Username: partialUser.Username,
+		Email:    partialUser.Email,
 	}
 
 	err2 := repository.CreateUser(newUser)
@@ -78,25 +60,12 @@ func CreateUser(body string) (models.User, error) {
 	return newUser, nil
 }
 
-func UpdateUser(userId uuid.UUID, body string) (models.User, error) {
-
-	var requestBody map[string]interface{}
-	if err := json.Unmarshal([]byte(body), &requestBody); err != nil {
-		logrus.Errorf("error decoding JSON: %s", err.Error())
-		return models.User{}, err
-	}
-
-	username, okUsername := requestBody["username"].(string)
-	email, okEmail := requestBody["email"].(string)
-
-	if !okEmail && !okUsername {
-		return models.User{}, errors.New("username and email fields are missing or not a string")
-	}
+func UpdateUser(partialUser models.User) (models.User, error) {
 
 	var user models.User
 	var err2 error
 
-	user, err2 = repository.UpdateUser(userId, username, email)
+	user, err2 = repository.UpdateUser(partialUser.Id, partialUser.Username, partialUser.Email)
 
 	if err2 != nil {
 		logrus.Errorf("error updating user: %s", err2.Error())

@@ -1,8 +1,10 @@
 package users
 
 import (
+	"encoding/json"
 	"io"
 	"middleware/example/internal/helpers"
+	"middleware/example/internal/models"
 	users "middleware/example/internal/services/users"
 	"net/http"
 
@@ -33,7 +35,31 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	bodyStr := string(body)
 
-	newUser, err := users.CreateUser(bodyStr)
+	var requestBody map[string]interface{}
+
+	if err := json.Unmarshal([]byte(bodyStr), &requestBody); err != nil {
+		logrus.Errorf("error decoding JSON: %s", err.Error())
+		return
+	}
+
+	username, ok := requestBody["username"].(string)
+	if !ok {
+		logrus.Error("username field is missing or not a string", err.Error())
+		return
+	}
+
+	email, ok := requestBody["email"].(string)
+	if !ok {
+		logrus.Error("email field is missing or not a string", err.Error())
+		return
+	}
+
+	newUser := models.User{
+		Username: username,
+		Email:    email,
+	}
+
+	newUserR, err := users.CreateUser(newUser)
 	if err != nil {
 		logrus.Errorf("error creating user: %s", err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
@@ -41,5 +67,5 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusCreated)
-	helpers.RespondWithFormat(w, r, newUser)
+	helpers.RespondWithFormat(w, r, newUserR)
 }

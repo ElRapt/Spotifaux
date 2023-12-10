@@ -1,8 +1,10 @@
 package users
 
 import (
+	"encoding/json"
 	"io"
 	"middleware/example/internal/helpers"
+	"middleware/example/internal/models"
 	users "middleware/example/internal/services/users"
 	"net/http"
 
@@ -42,7 +44,35 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 
 	bodyStr := string(body)
 
-	updatedUser, err := users.UpdateUser(userId, bodyStr)
+	var requestBody map[string]interface{}
+	if err := json.Unmarshal([]byte(bodyStr), &requestBody); err != nil {
+		logrus.Errorf("error decoding JSON: %s", err.Error())
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	username, okUsername := requestBody["username"].(string)
+	if !okUsername {
+		username = ""
+	}
+	email, okEmail := requestBody["email"].(string)
+	if !okEmail {
+		email = ""
+	}
+
+	if !okEmail && !okUsername {
+		w.WriteHeader(http.StatusBadRequest)
+		helpers.RespondWithFormat(w, r, map[string]string{"error": "username and email fields are both missing or not a string"})
+		return
+	}
+
+	newUser := models.User{
+		Id:       userId,
+		Username: username,
+		Email:    email,
+	}
+
+	updatedUser, err := users.UpdateUser(newUser)
 	if err != nil {
 		logrus.Errorf("error updating user: %s", err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
