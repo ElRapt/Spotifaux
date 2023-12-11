@@ -35,16 +35,13 @@ func init() {
 		logrus.Fatalf("error while opening database: %s", err.Error())
 	}
 	schemes := []string{
-		// Ajoutez ici le schéma de création de la table pour les notations
 		`
         CREATE TABLE IF NOT EXISTS Rating (
             id CHAR(36) PRIMARY KEY,
             userId CHAR(36) NOT NULL,
             songId CHAR(36) NOT NULL,
             rating INT NOT NULL,
-            comment TEXT,
-            FOREIGN KEY (userId) REFERENCES User(id),
-            FOREIGN KEY (songId) REFERENCES Song(id)
+            comment TEXT
         );
         `,
 	}
