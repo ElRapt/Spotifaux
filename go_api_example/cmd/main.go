@@ -38,8 +38,8 @@ func init() {
 		`
         CREATE TABLE IF NOT EXISTS Ratings (
             id CHAR(36) PRIMARY KEY,
-            userId CHAR(36) NOT NULL,
-            songId CHAR(36) NOT NULL,
+            user_id CHAR(36) NOT NULL,
+            song_id CHAR(36) NOT NULL,
             rating INT NOT NULL,
             comment TEXT
         );
