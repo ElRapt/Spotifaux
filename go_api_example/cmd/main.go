@@ -36,7 +36,7 @@ func init() {
 	}
 	schemes := []string{
 		`
-        CREATE TABLE IF NOT EXISTS Rating (
+        CREATE TABLE IF NOT EXISTS Ratings (
             id CHAR(36) PRIMARY KEY,
             userId CHAR(36) NOT NULL,
             songId CHAR(36) NOT NULL,
