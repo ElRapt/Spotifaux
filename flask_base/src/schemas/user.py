@@ -7,12 +7,14 @@ class UserSchema(Schema):
     inscription_date = fields.DateTime(description="Inscription date")
     name = fields.String(description="Name")
     username = fields.String(description="Username")
+    email = fields.String(description="Email")
     
     @staticmethod
     def is_empty(obj):
         return (not obj.get("id") or obj.get("id") == "") and \
                (not obj.get("name") or obj.get("name") == "") and \
                (not obj.get("username") or obj.get("username") == "") and \
+               (not obj.get("email") or obj.get("email") == "") and \
                (not obj.get("inscription_date") or obj.get("inscription_date") == "")
 
 
@@ -20,6 +22,7 @@ class BaseUserSchema(Schema):
     name = fields.String(description="Name")
     password = fields.String(description="Password")
     username = fields.String(description="Username")
+    email = fields.String(description="Email")
 
 
 # Schéma utilisateur de modification (name, username, password)
