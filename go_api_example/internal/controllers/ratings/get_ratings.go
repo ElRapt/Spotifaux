@@ -9,6 +9,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// test
 // GetRatings
 // @Tags         ratings
 // @Summary      Get ratings.
