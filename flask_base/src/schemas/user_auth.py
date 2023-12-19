@@ -13,7 +13,7 @@ class UserRegisterSchema(BaseUserSchema):
     # permet de définir dans quelles conditions le schéma est validé ou nom
     @validates_schema
     def validates_schemas(self, data, **kwargs):
-        if "name" not in data or data["name"] == "" or \
+        if "email" not in data or data["email"] == "" or \
                 "username" not in data or data["username"] == "" or \
                 "password" not in data or data["password"] == "":
-            raise ValidationError("['name','username','password'] must all be specified")
+            raise ValidationError("['email','username','password'] must all be specified")
