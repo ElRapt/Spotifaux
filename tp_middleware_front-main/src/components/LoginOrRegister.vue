@@ -3,12 +3,6 @@
     <div class="d-flex flex-column justify-content-center bg-black bg-opacity-50 mx-auto mt-5 w-40 rounded-2">
       <h1 class="text-secondary text-center my-4">{{ capitalizedAction }}</h1>
       <form class="w-75 mx-auto mt-5" @submit.prevent="execute_action()">
-        <div v-if="action === 'register'" class="form-group row">
-          <label class="col-lg-2 col-form-label col-form-label-lg">Name</label>
-          <div class="col-lg-10">
-            <input v-model="user.name" type="text" class="form-control form-control-lg" placeholder="Name">
-          </div>
-        </div>
         <div class="form-group row mt-3">
           <label class="col-lg-2 col-form-label col-form-label-lg">Username</label>
           <div class="col-lg-10">

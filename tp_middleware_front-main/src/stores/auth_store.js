@@ -10,7 +10,7 @@ export const useAuthStore = defineStore('auth', () => {
     //----- Store variables
     const currentUser = ref({})
     const isAuthenticated = computed(() => {
-        return currentUser.value !== null && currentUser.value !== undefined && currentUser.value.name !== null && currentUser.value.name !== undefined
+        return currentUser.value !== null && currentUser.value !== undefined
     })
     const localstorageName = "tchipify_is_authenticated"
 

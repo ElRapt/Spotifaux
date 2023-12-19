@@ -2,7 +2,7 @@
   <nav class="navbar navbar-dark bg-black sticky-top py-4">
     <a class="navbar-brand d-flex align-items-center" v-on:click="$router.push('/')">
       <img class="d-inline-block align-top mx-3" src="/src/assets/img/logo_purple.jpg" width="50" height="50" alt="">
-      Tchipify
+      Spotifaux
     </a>
     <div v-if="isAuthenticated" class="d-flex">
       <div class="d-flex">
