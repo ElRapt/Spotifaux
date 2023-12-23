@@ -4,13 +4,13 @@ from sqlalchemy import exc
 from marshmallow import EXCLUDE
 from flask_login import current_user
 
-from src.schemas.user import UserSchema
-from src.models.user import User as UserModel
-from src.models.http_exceptions import *
-import src.repositories.users as users_repository
+from schemas.user import UserSchema
+from models.user import User as UserModel
+from models.http_exceptions import *
+import repositories.users as users_repository
 
 
-users_url = "http://localhost:4000/users/"  # URL de l'API users (golang)
+users_url = "http://localhost:8080/users/"  # URL de l'API users (golang)
 
 
 def get_user(id):

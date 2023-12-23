@@ -6,16 +6,9 @@ Download modules :
 ```
 pip install -r requirements.txt
 ```
-On Debian : `pip install -r requirements.txt --break-system-packages`  
-
-Run (command line) from base directory (*flask_base*) :
+Run (command line) :
 ```
 PYTHONPATH=$PYTHONPATH:$(pwd) python3 src/app.py
-```
-
-If a warning about your PATH appears :  
-```
-export PATH=$PATH:$HOME/.local/bin
 ```
 
 ## Documentation

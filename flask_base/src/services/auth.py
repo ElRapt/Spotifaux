@@ -1,7 +1,7 @@
 from werkzeug.security import check_password_hash
 
-from src.models.http_exceptions import *
-import src.services.users as users_service
+from models.http_exceptions import *
+import services.users as users_service
 
 
 def login(user_login):

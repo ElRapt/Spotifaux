@@ -1,5 +1,5 @@
-from src.helpers import db
-from src.models.user import User
+from helpers import db
+from models.user import User
 
 
 def get_user(username):

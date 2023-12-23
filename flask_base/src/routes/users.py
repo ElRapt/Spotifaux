@@ -3,10 +3,10 @@ from flask import Blueprint, request
 from flask_login import login_required
 from marshmallow import ValidationError
 
-from src.models.http_exceptions import *
-from src.schemas.user import UserUpdateSchema
-from src.schemas.errors import *
-import src.services.users as users_service
+from models.http_exceptions import *
+from schemas.user import UserUpdateSchema
+from schemas.errors import *
+import services.users as users_service
 
 # from routes import users
 users = Blueprint(name="users", import_name=__name__)
