@@ -79,9 +79,9 @@
 
     <div style="margin: 20px; margin-bottom: 100px">
       <form class="form" v-on:submit.prevent="addSongToAPI()">
-        <input class="form-control" type="text" placeholder="Album name" v-model="addSong.album">
+        <input class="form-control" type="text" placeholder="Album name" v-model="addAlbum.name">
         <br />
-        <input class="form-control" type="text" placeholder="Artist name" v-model="addSong.artist">
+        <input class="form-control" type="text" placeholder="Artist name" v-model="addAlbum.artist">
         <br />
         <br />
         <button type="submit" class="btn btn-primary">Add album ></button>
@@ -93,7 +93,7 @@
 
     <div style="margin: 20px; margin-bottom: 100px">
       <form class="form" v-on:submit.prevent="addSongToAPI()">
-        <input class="form-control" type="text" placeholder="Genre" v-model="addSong.genre">
+        <input class="form-control" type="text" placeholder="Genre" v-model="addGenre.name">
         <br />
         <button type="submit" class="btn btn-primary">Add genre ></button>
       </form>
@@ -104,7 +104,7 @@
 
     <div style="margin: 20px; margin-bottom: 100px">
       <form class="form" v-on:submit.prevent="addSongToAPI()">
-        <input class="form-control" type="text" placeholder="Artist name" v-model="addSong.artist">
+        <input class="form-control" type="text" placeholder="Artist name" v-model="addArtist.name">
         <br />
         <button type="submit" class="btn btn-primary">Add artist ></button>
       </form>
@@ -136,6 +136,22 @@ const addSong = reactive({
   artist: "",
   album: "",
   genre: ""
+})
+
+const artist = reactive({})
+const addArtist = reactive({
+  name: ""
+})
+
+const album = reactive({})
+const addAlbum = reactive({
+  name: "",
+  artist: ""
+})
+
+const genre = reactive({})
+const addGenre = reactive({
+  name: ""
 })
 
 const generalResponses = useGeneralResponses()
