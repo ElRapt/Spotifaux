@@ -63,14 +63,55 @@
         <br />
         <input class="form-control" type="text" placeholder="Artist name" v-model="addSong.artist">
         <br />
+        <input class="form-control" type="text" placeholder="Album name" v-model="addSong.album">
+        <br />
+        <input class="form-control" type="text" placeholder="Genre" v-model="addSong.genre">
+        <br />
         <input class="form-control" type="text" placeholder="File name" v-model="addSong.file_name">
         <br />
         <button type="submit" class="btn btn-primary">Add music ></button>
       </form>
     </div>
 
+    <!-- TODO: fix v-model -->
+    <hr>
+    <h2 style="padding: 0 15px">Add an album</h2>
 
+    <div style="margin: 20px; margin-bottom: 100px">
+      <form class="form" v-on:submit.prevent="addSongToAPI()">
+        <input class="form-control" type="text" placeholder="Album name" v-model="addSong.album">
+        <br />
+        <input class="form-control" type="text" placeholder="Artist name" v-model="addSong.artist">
+        <br />
+        <br />
+        <button type="submit" class="btn btn-primary">Add album ></button>
+      </form>
+    </div>
+
+    <hr>
+    <h2 style="padding: 0 15px">Add a genre</h2>
+
+    <div style="margin: 20px; margin-bottom: 100px">
+      <form class="form" v-on:submit.prevent="addSongToAPI()">
+        <input class="form-control" type="text" placeholder="Genre" v-model="addSong.genre">
+        <br />
+        <button type="submit" class="btn btn-primary">Add genre ></button>
+      </form>
+    </div>
+
+    <hr>
+    <h2 style="padding: 0 15px">Add an artist</h2>
+
+    <div style="margin: 20px; margin-bottom: 100px">
+      <form class="form" v-on:submit.prevent="addSongToAPI()">
+        <input class="form-control" type="text" placeholder="Artist name" v-model="addSong.artist">
+        <br />
+        <button type="submit" class="btn btn-primary">Add artist ></button>
+      </form>
+    </div>
   </div>
+
+
 
 </template>
 
@@ -92,7 +133,9 @@ const songs = reactive({})
 const addSong = reactive({
   title: "",
   file_name: "",
-  artist: ""
+  artist: "",
+  album: "",
+  genre: ""
 })
 
 const generalResponses = useGeneralResponses()
