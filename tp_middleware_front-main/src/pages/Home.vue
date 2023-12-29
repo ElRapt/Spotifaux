@@ -53,6 +53,7 @@
         </div>
       </div>
     </div>
+    
 
     <hr>
     <h2 style="padding: 0 15px">Add a music</h2>
@@ -78,7 +79,7 @@
     <h2 style="padding: 0 15px">Add an album</h2>
 
     <div style="margin: 20px; margin-bottom: 100px">
-      <form class="form" v-on:submit.prevent="addMusicToAPI()">
+      <form class="form" v-on:submit.prevent="addAlbumToAPI()">
         <input class="form-control" type="text" placeholder="Album name" v-model="addAlbum.name">
         <br />
         <input class="form-control" type="text" placeholder="Artist name" v-model="addAlbum.artist">
@@ -92,7 +93,7 @@
     <h2 style="padding: 0 15px">Add a genre</h2>
 
     <div style="margin: 20px; margin-bottom: 100px">
-      <form class="form" v-on:submit.prevent="addMusicToAPI()">
+      <form class="form" v-on:submit.prevent="addGenreToAPI()">
         <input class="form-control" type="text" placeholder="Genre" v-model="addGenre.name">
         <br />
         <button type="submit" class="btn btn-primary">Add genre ></button>
@@ -103,7 +104,7 @@
     <h2 style="padding: 0 15px">Add an artist</h2>
 
     <div style="margin: 20px; margin-bottom: 100px">
-      <form class="form" v-on:submit.prevent="addMusicToAPI()">
+      <form class="form" v-on:submit.prevent="addArtistToAPI()">
         <input class="form-control" type="text" placeholder="Artist name" v-model="addArtist.name">
         <br />
         <button type="submit" class="btn btn-primary">Add artist ></button>
@@ -213,6 +214,125 @@ async function deleteMusic(data) {
   }
 }
 
+async function addAlbumToAPI() {
+  let dataToSend = {
+    name: addAlbum.name,
+    artist: addAlbum.artist
+  }
+
+  const config = {
+    headers: authStore.authAxiosConfig,
+    method: 'POST',
+    data: dataToSend
+  }
+  const {error} = await useAxios(authStore.authBaseUrl + 'albums/', config)
+  if (!error.value) {
+    addAlbum.name = ""
+    addAlbum.artist = ""
+    this.$forceUpdate
+    toast.success("album added")
+    await getMusics()
+  } else {
+    generalResponses.manageError(error.value)
+    // manage error and let the component display it however it wants to
+    return Promise.reject(error.value)
+  }
+}
+
+async function deleteAlbum(data) {
+  const config = {
+    headers: authStore.authAxiosConfig,
+    method: 'DELETE',
+  }
+  const {error} = await useAxios(authStore.authBaseUrl + 'albums/' + data.id, config)
+  if (!error.value) {
+    toast.success("album deleted")
+    await getMusics()
+  } else {
+    generalResponses.manageError(error.value)
+    // manage error and let the component display it however it wants to
+    return Promise.reject(error.value)
+  }
+}
+
+async function addArtistToAPI() {
+  let dataToSend = {
+    name: addArtist.name
+  }
+
+  const config = {
+    headers: authStore.authAxiosConfig,
+    method: 'POST',
+    data: dataToSend
+  }
+  const {error} = await useAxios(authStore.authBaseUrl + 'artists/', config)
+  if (!error.value) {
+    addArtist.name = ""
+    this.$forceUpdate
+    toast.success("artist added")
+    await getMusics()
+  } else {
+    generalResponses.manageError(error.value)
+    // manage error and let the component display it however it wants to
+    return Promise.reject(error.value)
+  }
+}
+
+async function deleteArtist(data) {
+  const config = {
+    headers: authStore.authAxiosConfig,
+    method: 'DELETE',
+  }
+  const {error} = await useAxios(authStore.authBaseUrl + 'artists/' + data.id, config)
+  if (!error.value) {
+    toast.success("artist deleted")
+    await getMusics()
+  } else {
+    generalResponses.manageError(error.value)
+    // manage error and let the component display it however it wants to
+    return Promise.reject(error.value)
+  }
+}
+
+async function addGenreToAPI() {
+  let dataToSend = {
+    name: addGenre.name
+  }
+
+  const config = {
+    headers: authStore.authAxiosConfig,
+    method: 'POST',
+    data: dataToSend
+  }
+  const {error} = await useAxios(authStore.authBaseUrl + 'genres/', config)
+  if (!error.value) {
+    addGenre.name = ""
+    this.$forceUpdate
+    toast.success("genre added")
+    await getMusics()
+  } else {
+    generalResponses.manageError(error.value)
+    // manage error and let the component display it however it wants to
+    return Promise.reject(error.value)
+  }
+}
+
+async function deleteGenre(data) {
+  const config = {
+    headers: authStore.authAxiosConfig,
+    method: 'DELETE',
+  }
+  const {error} = await useAxios(authStore.authBaseUrl + 'genres/' + data.id, config)
+  if (!error.value) {
+    toast.success("genre deleted")
+    await getMusics()
+  } else {
+    generalResponses.manageError(error.value)
+    // manage error and let the component display it however it wants to
+    return Promise.reject(error.value)
+  }
+}
+
 async function addComment(data) {
   let dataToSend = {
     comment: data.add_comment,
@@ -256,5 +376,51 @@ async function getMusics() {
     return Promise.reject(error.value)
   }
 }
+
+async function getGenres() {
+  const config = {
+    headers: authStore.authAxiosConfig,
+    method: 'GET',
+  }
+  const {data, error} = await useAxios(authStore.authBaseUrl + 'genres/', config)
+  if (!error.value) {
+    genres.value = data
+  } else {
+    generalResponses.manageError(error.value)
+    // manage error and let the component display it however it wants to
+    return Promise.reject(error.value)
+  }
+}
+
+async function getArtists() {
+  const config = {
+    headers: authStore.authAxiosConfig,
+    method: 'GET',
+  }
+  const {data, error} = await useAxios(authStore.authBaseUrl + 'artists/', config)
+  if (!error.value) {
+    artists.value = data
+  } else {
+    generalResponses.manageError(error.value)
+    // manage error and let the component display it however it wants to
+    return Promise.reject(error.value)
+  }
+}
+
+async function getAlbums() {
+  const config = {
+    headers: authStore.authAxiosConfig,
+    method: 'GET',
+  }
+  const {data, error} = await useAxios(authStore.authBaseUrl + 'albums/', config)
+  if (!error.value) {
+    albums.value = data
+  } else {
+    generalResponses.manageError(error.value)
+    // manage error and let the component display it however it wants to
+    return Promise.reject(error.value)
+  }
+}
+
 
 </script>
