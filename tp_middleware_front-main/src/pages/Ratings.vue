@@ -66,7 +66,7 @@ async function deleteComment(data) {
     headers: authStore.authAxiosConfig,
     method: 'DELETE',
   }
-  const {error} = await useAxios(authStore.authBaseUrl + 'songs/' + data.song_id + '/ratings/' + data.id, config)
+  const {error} = await useAxios(authStore.authBaseUrl + 'musics/' + data.song_id + '/ratings/' + data.id, config)
   if (!error.value) {
     toast.success("Rating deleted")
     await getRatings()
@@ -81,7 +81,7 @@ async function getRatings() {
     headers: authStore.authAxiosConfig,
     method: 'GET',
   }
-  const {data, error} = await useAxios(authStore.authBaseUrl + 'songs/', config)
+  const {data, error} = await useAxios(authStore.authBaseUrl + 'musics/', config)
   if (!error.value) {
     userRatings.ratings = []
 

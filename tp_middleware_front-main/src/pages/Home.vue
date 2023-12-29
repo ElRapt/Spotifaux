@@ -119,7 +119,7 @@ async function addSongToAPI() {
     method: 'POST',
     data: dataToSend
   }
-  const {error} = await useAxios(authStore.authBaseUrl + 'songs/', config)
+  const {error} = await useAxios(authStore.authBaseUrl + 'musics/', config)
   if (!error.value) {
     addSong.title = ""
     addSong.file_name = ""
@@ -139,7 +139,7 @@ async function deleteSong(data) {
     headers: authStore.authAxiosConfig,
     method: 'DELETE',
   }
-  const {error} = await useAxios(authStore.authBaseUrl + 'songs/' + data.id, config)
+  const {error} = await useAxios(authStore.authBaseUrl + 'musics/' + data.id, config)
   if (!error.value) {
     toast.success("Song deleted")
     await getSongs()
@@ -161,7 +161,7 @@ async function addComment(data) {
     method: 'POST',
     data: dataToSend
   }
-  const {error} = await useAxios(authStore.authBaseUrl + 'songs/' + data.id + "/ratings", config)
+  const {error} = await useAxios(authStore.authBaseUrl + 'musics/' + data.id + "/ratings", config)
   if (!error.value) {
     data.add_comment = ""
     data.add_rating = 1
@@ -180,7 +180,7 @@ async function getSongs() {
     headers: authStore.authAxiosConfig,
     method: 'GET',
   }
-  const {data, error} = await useAxios(authStore.authBaseUrl + 'songs/', config)
+  const {data, error} = await useAxios(authStore.authBaseUrl + 'musics/', config)
   if (!error.value) {
     data.value.forEach(e => {
       e.add_comment = "";
