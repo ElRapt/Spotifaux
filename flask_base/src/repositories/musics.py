@@ -25,6 +25,6 @@ def update_music(Music):
     db.session.commit()
 
 
-def delete_Music(id):
+def delete_music(id):
     db.session.delete(get_music_from_id(id))
     db.session.commit()

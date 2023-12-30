@@ -8,7 +8,7 @@
     <div class="row" style="margin: 0">
       <div v-for="music in musics.value" v-bind:key="music.id" class="col-sm-4" style="padding: 10px">
         <div class=" card" style="margin: 10px 0">
-          <h3 class="card-header">{{ music.title }} - {{ music.artist }} |
+          <h3 class="card-header">{{ music.title }} - {{ music.artist }} - {{ music.album }} - {{ music.genre }}  |
             {{ avg(music.ratings.map(e => e.rating)).toFixed(2) }}/5
             <span class="fas fa-star" style="color: #ffff00"/></h3>
           <div class="card-body">
