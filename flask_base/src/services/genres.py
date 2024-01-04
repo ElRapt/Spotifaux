@@ -1,9 +1,7 @@
 import json
 import requests
-from sqlalchemy import exc
+import uuid
 from marshmallow import EXCLUDE
-from flask_login import current_user
-
 from schemas.genre import GenreSchema
 from models.genre import Genre as GenreModel
 from models.http_exceptions import *
@@ -19,8 +17,10 @@ def get_genre(id):
 
 
 def create_genre(genre_register):
+    new_uuid = str(uuid.uuid4())
     # on récupère le modèle utilisateur pour la BDD
     genre_model = GenreModel.from_dict(genre_register)
+    genre_model.id = new_uuid
     # on récupère le schéma utilisateur pour la requête vers l'API genre
     genre_schema = GenreSchema().loads(json.dumps(genre_register), unknown=EXCLUDE)
 
@@ -32,7 +32,6 @@ def create_genre(genre_register):
     # on ajoute l'utilisateur dans la base de données
     # pour que les données entre API et BDD correspondent
     try:
-        genre_model.id = response.json()["id"]
         genre_repository.add_genre(genre_model)
     except Exception:
         raise SomethingWentWrong

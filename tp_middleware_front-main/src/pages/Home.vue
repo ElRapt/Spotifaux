@@ -308,8 +308,8 @@ async function addGenreToAPI() {
   if (!error.value) {
     addGenre.name = ""
     this.$forceUpdate
-    toast.success("genre added")
-    await getMusics()
+    toast.success("Genre added")
+    await getGenres()
   } else {
     generalResponses.manageError(error.value)
     // manage error and let the component display it however it wants to

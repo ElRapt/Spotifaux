@@ -113,6 +113,68 @@ def put_genre(id):
 
     return genres_service.modify_genre(id, genre_update)
   
+  
+@genres.route('/', methods=['POST'])
+@login_required
+def post_genre():
+    """
+    ---
+    post:
+      description: Create a genre
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: uuidv4
+          required: true
+          description: UUID of genre id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: GenreUpdate
+          application/yaml:
+            schema: GenreUpdate
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: Genre
+            application/yaml:
+              schema: Genre
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema: BadRequest
+            application/yaml:
+              schema: BadRequest
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema: Unauthorized
+            application/yaml:
+              schema: Unauthorized
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema: Conflict
+            application/yaml:
+              schema: Conflict
+      tags:
+          - genres
+    """
+    try:
+        genre_create = GenreUpdateSchema().loads(request.data)
+    except ValidationError as err:
+        error = UnprocessableEntitySchema().loads(json.dumps(err.messages))
+        return error, error.get("code")
+
+    return genres_service.create_genre(genre_create)
+
 
 
 
