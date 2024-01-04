@@ -59,6 +59,15 @@ func PostGenre(newGenre models.Genre) (uuid.UUID, error) {
 	}
 	defer helpers.CloseDB(db)
 
+	// Generate a new UUID if not provided
+	if newGenre.Id == uuid.Nil {
+		newId, err := uuid.NewV4()
+		if err != nil {
+			return uuid.Nil, err
+		}
+		newGenre.Id = newId
+	}
+
 	_, err = db.Exec("INSERT INTO Genre (id, name) VALUES (?, ?)", newGenre.Id, newGenre.Name)
 	if err != nil {
 		return uuid.Nil, err

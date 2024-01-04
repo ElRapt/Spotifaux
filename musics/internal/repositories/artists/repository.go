@@ -59,6 +59,15 @@ func PostArtist(newArtist models.Artist) (uuid.UUID, error) {
 	}
 	defer helpers.CloseDB(db)
 
+	// Generate a new UUID if not provided
+	if newArtist.Id == uuid.Nil {
+		newId, err := uuid.NewV4()
+		if err != nil {
+			return uuid.Nil, err
+		}
+		newArtist.Id = newId
+	}
+
 	_, err = db.Exec("INSERT INTO Artist (id, name) VALUES (?, ?)", newArtist.Id, newArtist.Name)
 	if err != nil {
 		return uuid.Nil, err

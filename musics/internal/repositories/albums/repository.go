@@ -59,6 +59,15 @@ func PostAlbum(newAlbum models.Album) (uuid.UUID, error) {
 	}
 	defer helpers.CloseDB(db)
 
+	// Generate a new UUID if not provided
+	if newAlbum.Id == uuid.Nil {
+		newId, err := uuid.NewV4()
+		if err != nil {
+			return uuid.Nil, err
+		}
+		newAlbum.Id = newId
+	}
+
 	_, err = db.Exec("INSERT INTO Album (id, name, artistId) VALUES (?, ?, ?)", newAlbum.Id, newAlbum.Name, newAlbum.ArtistId)
 	if err != nil {
 		return uuid.Nil, err

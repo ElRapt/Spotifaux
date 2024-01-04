@@ -59,6 +59,15 @@ func PostMusic(newMusic models.Music) (uuid.UUID, error) {
 	}
 	defer helpers.CloseDB(db)
 
+	// Generate a new UUID if not provided
+	if newMusic.Id == uuid.Nil {
+		newId, err := uuid.NewV4()
+		if err != nil {
+			return uuid.Nil, err
+		}
+		newMusic.Id = newId
+	}
+
 	_, err = db.Exec("INSERT INTO Music (id, title, genreId, artistId, albumId) VALUES (?, ?, ?, ?, ?)", newMusic.Id, newMusic.Title, newMusic.GenreId, newMusic.ArtistId, newMusic.AlbumId)
 	if err != nil {
 		return uuid.Nil, err
