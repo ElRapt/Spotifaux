@@ -11,6 +11,8 @@ import services.genres as genres_service
 # from routes import genres
 genres = Blueprint(name="genres", import_name=__name__)
 
+
+
 @genres.route('/<id>', methods=['GET'])
 @login_required
 def get_genre(id):
@@ -52,6 +54,35 @@ def get_genre(id):
     """
     return genres_service.get_genre(id)
   
+  
+
+@genres.route('/', methods=['GET'])  
+@login_required
+def get_genres():
+    """
+    ---
+    get:
+      description: Getting all genres
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema: Genre
+            application/yaml:
+              schema: Genre
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema: Unauthorized
+            application/yaml:
+              schema: Unauthorized
+      tags:
+          - genres
+    """
+    return genres_service.get_genres()
+
 @genres.route('/<id>', methods=['PUT'])
 @login_required
 def put_genre(id):

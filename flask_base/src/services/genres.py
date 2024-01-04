@@ -15,6 +15,9 @@ def get_genre(id):
     response = requests.request(method="GET", url=genres_url+id)
     return response.json(), response.status_code
 
+def get_genres():
+    response = requests.request(method="GET", url=genres_url)
+    return response.json(), response.status_code
 
 def create_genre(genre_register):
     new_uuid = str(uuid.uuid4())

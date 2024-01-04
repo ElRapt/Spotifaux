@@ -54,6 +54,19 @@
       </div>
     </div>
     
+    <hr>
+  <h2 style="padding: 0 15px">Genre list</h2>
+  <div v-if="genres.length === 0" style="margin: 0 auto">
+    <h3>No genres to display :-(</h3>
+  </div>
+  <div class="row" style="margin: 0">
+    <div v-for="genre in genres.value" v-bind:key="genre.id" class="col-sm-4" style="padding: 10px">
+      <div class="card" style="margin: 10px 0">
+        <h3 class="card-header">{{ genre.name }}</h3>
+      </div>
+    </div>
+  </div>
+
 
     <hr>
     <h2 style="padding: 0 15px">Add a music</h2>
@@ -139,18 +152,18 @@ const addMusic = reactive({
   genre: ""
 })
 
-const artist = reactive({})
+const artists = reactive({})
 const addArtist = reactive({
   name: ""
 })
 
-const album = reactive({})
+const albums = reactive({})
 const addAlbum = reactive({
   name: "",
   artist: ""
 })
 
-const genre = reactive({})
+const genres = reactive({})
 const addGenre = reactive({
   name: ""
 })
@@ -160,6 +173,7 @@ const toast = useToast();
 
 onMounted(() => {
   getMusics()
+  getGenres()
 })
 
 function avg(d) {
