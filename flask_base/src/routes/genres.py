@@ -26,7 +26,7 @@ def get_genre(id):
           schema:
             type: uuidv4
           required: true
-          description: UUID of genre id
+          description: UUID of Genre id
       responses:
         '200':
           description: Ok
@@ -53,7 +53,6 @@ def get_genre(id):
           - genres
     """
     return genres_service.get_genre(id)
-  
   
 
 @genres.route('/', methods=['GET'])  
