@@ -6,7 +6,7 @@ from marshmallow import ValidationError
 from models.http_exceptions import *
 from schemas.artist import ArtistUpdateSchema
 from schemas.errors import *
-import services.artists as artist_service
+import services.artists as artists_service
 
 # from routes import artists
 artists = Blueprint(name="artists", import_name=__name__)
@@ -50,7 +50,34 @@ def get_artist(id):
       tags:
           - artists
     """
-    return artist_service.get_artist(id)
+    return artists_service.get_artist(id)
+  
+@artists.route('/', methods=['GET'])
+@login_required
+def get_artists():
+    """
+    ---
+    get:
+      description: Getting all artists
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema: artist
+            application/yaml:
+              schema: artist
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema: Unauthorized
+            application/yaml:
+              schema: Unauthorized
+      tags:
+          - artists
+    """
+    return artists_service.get_artists()
   
 @artists.route('/<id>', methods=['PUT'])
 @login_required
@@ -111,4 +138,70 @@ def put_artist(id):
         error = UnprocessableEntitySchema().loads(json.dumps(err.messages))
         return error, error.get("code")
 
-    return artist_service.modify_artist(id, artist_update)
+    return artists_service.modify_artist(id, artist_update)
+  
+
+@artists.route('/', methods=['POST'])
+@login_required
+def post_artist():
+    """
+    ---
+    post:
+      description: Create a artist
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: uuidv4
+          required: true
+          description: UUID of artist id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: artistUpdate
+          application/yaml:
+            schema: artistUpdate
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema: artist
+            application/yaml:
+              schema: artist
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema: BadRequest
+            application/yaml:
+              schema: BadRequest
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema: Unauthorized
+            application/yaml:
+              schema: Unauthorized
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema: Conflict
+            application/yaml:
+              schema: Conflict
+      tags:
+          - artists
+    """
+    try:
+        artist_create = ArtistUpdateSchema().loads(request.data)
+    except ValidationError as err:
+        error = UnprocessableEntitySchema().loads(json.dumps(err.messages))
+        return error, error.get("code")
+
+    return artists_service.create_artist(artist_create)
+
+
+
+

@@ -20,10 +20,8 @@ def get_genres():
     return response.json(), response.status_code
 
 def create_genre(genre_register):
-    new_uuid = str(uuid.uuid4())
     # on récupère le modèle utilisateur pour la BDD
     genre_model = GenreModel.from_dict(genre_register)
-    genre_model.id = new_uuid
     # on récupère le schéma utilisateur pour la requête vers l'API genre
     genre_schema = GenreSchema().loads(json.dumps(genre_register), unknown=EXCLUDE)
 

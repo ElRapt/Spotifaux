@@ -17,6 +17,10 @@ def get_music(id):
     response = requests.request(method="GET", url=musics_url+id)
     return response.json(), response.status_code
 
+def get_musics():
+    response = requests.request(method="GET", url=musics_url)
+    return response.json(), response.status_code
+
 
 def create_music(music_register):
     # on récupère le modèle utilisateur pour la BDD

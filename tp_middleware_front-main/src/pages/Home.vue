@@ -67,6 +67,19 @@
     </div>
   </div>
 
+  <hr>
+  <h2 style="padding: 0 15px">Artist list</h2>
+  <div v-if="artists.length === 0" style="margin: 0 auto">
+    <h3>No artists to display :-(</h3>
+  </div>
+  <div class="row" style="margin: 0">
+    <div v-for="artist in artists.value" v-bind:key="artist.id" class="col-sm-4" style="padding: 10px">
+      <div class="card" style="margin: 10px 0">
+        <h3 class="card-header">{{ artist.name }}</h3>
+      </div>
+    </div>
+  </div>
+
 
     <hr>
     <h2 style="padding: 0 15px">Add a music</h2>
@@ -174,6 +187,7 @@ const toast = useToast();
 onMounted(() => {
   getMusics()
   getGenres()
+  getArtists()
 })
 
 function avg(d) {
@@ -203,7 +217,7 @@ async function addMusicToAPI() {
     addMusic.album = ""
     addMusic.genre = ""
     this.$forceUpdate
-    toast.success("music added")
+    toast.success("Music added")
     await getMusics()
   } else {
     generalResponses.manageError(error.value)
@@ -219,7 +233,7 @@ async function deleteMusic(data) {
   }
   const {error} = await useAxios(authStore.authBaseUrl + 'musics/' + data.id, config)
   if (!error.value) {
-    toast.success("music deleted")
+    toast.success("Music deleted")
     await getMusics()
   } else {
     generalResponses.manageError(error.value)
@@ -244,7 +258,7 @@ async function addAlbumToAPI() {
     addAlbum.name = ""
     addAlbum.artist = ""
     this.$forceUpdate
-    toast.success("album added")
+    toast.success("Album added")
     await getMusics()
   } else {
     generalResponses.manageError(error.value)
@@ -283,7 +297,7 @@ async function addArtistToAPI() {
   if (!error.value) {
     addArtist.name = ""
     this.$forceUpdate
-    toast.success("artist added")
+    toast.success("Artist added")
     await getMusics()
   } else {
     generalResponses.manageError(error.value)
@@ -299,7 +313,7 @@ async function deleteArtist(data) {
   }
   const {error} = await useAxios(authStore.authBaseUrl + 'artists/' + data.id, config)
   if (!error.value) {
-    toast.success("artist deleted")
+    toast.success("Artist deleted")
     await getMusics()
   } else {
     generalResponses.manageError(error.value)

@@ -12,6 +12,33 @@ import services.musics as musics_service
 musics = Blueprint(name="musics", import_name=__name__)
 
 
+@musics.route('/', methods=['GET'])  
+@login_required
+def get_musics():
+    """
+    ---
+    get:
+      description: Getting all musics
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema: Genre
+            application/yaml:
+              schema: Genre
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema: Unauthorized
+            application/yaml:
+              schema: Unauthorized
+      tags:
+          - musics
+    """
+    return musics_service.get_musics()
+
 @musics.route('/<id>', methods=['GET'])
 @login_required
 def get_music(id):

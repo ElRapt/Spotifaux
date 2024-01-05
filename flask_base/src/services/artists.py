@@ -17,6 +17,9 @@ def get_artist(id):
     response = requests.request(method="GET", url=artists_url+id)
     return response.json(), response.status_code
 
+def get_artists():
+    response = requests.request(method="GET", url=artists_url)
+    return response.json(), response.status_code
 
 def create_artist(artist_register):
     # on récupère le modèle utilisateur pour la BDD
