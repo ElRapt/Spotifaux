@@ -70,3 +70,7 @@ def get_genre_from_db(name):
 
 def genre_exists(name):
     return get_genre_from_db(name) is not None
+
+def delete_genre(id):
+    response = requests.request(method="DELETE", url=genres_url+id)
+    return response.json(), response.status_code

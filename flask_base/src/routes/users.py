@@ -54,6 +54,33 @@ def get_user(id):
     return users_service.get_user(id)
 
 
+@users.route('/', methods=['GET'])
+@login_required
+def get_users():
+    """
+    ---
+    get:
+      description: Getting all users
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema: User
+            application/yaml:
+              schema: User
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema: Unauthorized
+            application/yaml:
+              schema: Unauthorized
+      tags:
+          - users
+    """
+    return users_service.get_users()
+
 @users.route('/<id>', methods=['PUT'])
 @login_required
 def put_user(id):

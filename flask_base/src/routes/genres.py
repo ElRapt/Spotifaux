@@ -63,6 +63,13 @@ def get_genres():
     ---
     get:
       description: Getting all genres
+      requestBody:
+        required: true
+        content:
+            application/json:
+                schema: GenreUpdate
+            application/yaml:
+                schema: GenreUpdate
       responses:
         '200':
           description: Ok
@@ -208,4 +215,43 @@ def post_genre():
 
 
 
-
+@genres.route('/<id>', methods=['DELETE'])
+@login_required
+def delete_genre(id):
+    """
+    ---
+    delete:
+      description: Delete a genre
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: uuidv4
+          required: true
+          description: UUID of genre id
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema: Genre
+            application/yaml:
+              schema: Genre
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema: Unauthorized
+            application/yaml:
+              schema: Unauthorized
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema: NotFound
+            application/yaml:
+              schema: NotFound
+      tags:
+          - genres
+    """
+    return genres_service.delete_genre(id)
