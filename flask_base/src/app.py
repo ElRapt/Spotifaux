@@ -12,7 +12,6 @@ from helpers.app import config_app
 
 # configure application and DB
 app = config_app()
-app.debug = True
 
 # register routes
 app.register_blueprint(auth_route, url_prefix="/")
