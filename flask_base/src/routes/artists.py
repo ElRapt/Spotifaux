@@ -3,7 +3,7 @@ from flask import Blueprint, request
 from flask_login import login_required
 from marshmallow import ValidationError
 
-from helpers.content_negociation import content_negociation
+from helpers.content_negotiation import content_negotiation
 from models.http_exceptions import *
 from schemas.artist import ArtistUpdateSchema
 from schemas.errors import *
@@ -51,7 +51,7 @@ def get_artist(id):
       tags:
           - artists
     """
-    return content_negociation(*artists_service.get_artist(id))
+    return content_negotiation(*artists_service.get_artist(id))
   
 @artists.route('/', methods=['GET'])
 @login_required
@@ -78,7 +78,7 @@ def get_artists():
       tags:
           - artists
     """
-    return content_negociation(*artists_service.get_artists())
+    return content_negotiation(*artists_service.get_artists())
   
 @artists.route('/<id>', methods=['PUT'])
 @login_required
@@ -137,9 +137,9 @@ def put_artist(id):
         artist_update = ArtistUpdateSchema().loads(request.data)
     except ValidationError as err:
         error = UnprocessableEntitySchema().loads(json.dumps(err.messages))
-        return content_negociation(error, error.get("code"))
+        return content_negotiation(error, error.get("code"))
 
-    return content_negociation(*artists_service.update_artist(id, artist_update))
+    return content_negotiation(*artists_service.update_artist(id, artist_update))
   
 
 @artists.route('/', methods=['POST'])
@@ -199,9 +199,9 @@ def post_artist():
         artist_create = ArtistUpdateSchema().loads(request.data)
     except ValidationError as err:
         error = UnprocessableEntitySchema().loads(json.dumps(err.messages))
-        return content_negociation(error, error.get("code"))
+        return content_negotiation(error, error.get("code"))
 
-    return content_negociation(*artists_service.create_artist(artist_create))
+    return content_negotiation(*artists_service.create_artist(artist_create))
 
 
 

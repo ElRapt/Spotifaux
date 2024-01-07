@@ -3,7 +3,7 @@ from flask import Blueprint, request
 from flask_login import login_required
 from marshmallow import ValidationError
 
-from helpers.content_negociation import content_negociation
+from helpers.content_negotiation import content_negotiation
 from models.http_exceptions import *
 from schemas.music import MusicUpdateSchema
 from schemas.errors import *
@@ -38,7 +38,7 @@ def get_musics():
       tags:
           - musics
     """
-    return content_negociation(*musics_service.get_musics())
+    return content_negotiation(*musics_service.get_musics())
 
 @musics.route('/<id>', methods=['GET'])
 @login_required
@@ -79,7 +79,7 @@ def get_music(id):
       tags:
           - musics
     """
-    return content_negociation(*musics_service.get_music(id)) 
+    return content_negotiation(*musics_service.get_music(id)) 
 
 
 
@@ -146,6 +146,6 @@ def put_music(id):
         music_update = MusicUpdateSchema().loads(request.data)
     except ValidationError as err:
         error = UnprocessableEntitySchema().loads(json.dumps(err.messages))
-        return content_negociation(error, error.get("code"))
+        return content_negotiation(error, error.get("code"))
 
-    return content_negociation(*musics_service.put_music(id, music_update))
+    return content_negotiation(*musics_service.put_music(id, music_update))
