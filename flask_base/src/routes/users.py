@@ -3,6 +3,7 @@ from flask import Blueprint, request
 from flask_login import login_required
 from marshmallow import ValidationError
 
+from helpers.content_negociation import content_negociation
 from models.http_exceptions import *
 from schemas.user import UserUpdateSchema
 from schemas.errors import *
@@ -51,7 +52,7 @@ def get_user(id):
       tags:
           - users
     """
-    return users_service.get_user(id)
+    return content_negociation(*users_service.get_user(id))
 
 
 @users.route('/', methods=['GET'])
@@ -79,7 +80,7 @@ def get_users():
       tags:
           - users
     """
-    return users_service.get_users()
+    return content_negociation(*users_service.get_users())
 
 @users.route('/<id>', methods=['PUT'])
 @login_required
@@ -137,20 +138,20 @@ def put_user(id):
         user_update = UserUpdateSchema().loads(json_data=request.data.decode('utf-8'))
     except ValidationError as e:
         error = UnprocessableEntitySchema().loads(json.dumps({"message": e.messages.__str__()}))
-        return error, error.get("code")
+        return content_negociation(error, error.get("code"))  
 
     # modification de l'utilisateur (username, nom, mot de passe, etc.)
     try:
-        return users_service.modify_user(id, user_update)
+        return content_negociation(*users_service.put_user(id, user_update))
     except Conflict:
         error = ConflictSchema().loads(json.dumps({"message": "User already exists"}))
-        return error, error.get("code")
+        return content_negociation(error, error.get("code")) 
     except UnprocessableEntity:
         error = UnprocessableEntitySchema().loads(json.dumps({"message": "One required field was empty"}))
-        return error, error.get("code")
+        return content_negociation(error, error.get("code"))
     except Forbidden:
         error = ForbiddenSchema().loads(json.dumps({"message": "Can't manage other users"}))
-        return error, error.get("code")
+        return content_negociation(error, error.get("code"))
     except Exception:
         error = SomethingWentWrongSchema().loads("{}")
-        return error, error.get("code")
+        return content_negociation(error, error.get("code"))

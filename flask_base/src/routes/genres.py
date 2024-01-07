@@ -3,6 +3,7 @@ from flask import Blueprint, request
 from flask_login import login_required
 from marshmallow import ValidationError
 
+from helpers.content_negociation import content_negociation
 from models.http_exceptions import *
 from schemas.genre import GenreUpdateSchema
 from schemas.errors import *
@@ -52,7 +53,7 @@ def get_genre(id):
       tags:
           - genres
     """
-    return genres_service.get_genre(id)
+    return content_negociation(*genres_service.get_genre(id))
   
 
 @genres.route('/', methods=['GET'])  
@@ -87,7 +88,7 @@ def get_genres():
       tags:
           - genres
     """
-    return genres_service.get_genres()
+    return content_negociation(*genres_service.get_genres())
 
 @genres.route('/<id>', methods=['PUT'])
 @login_required
@@ -152,13 +153,13 @@ def put_genre(id):
         genre_update = GenreUpdateSchema().loads(json_data=request.data.decode('utf-8'))
     except ValidationError as e:
         error = UnprocessableEntitySchema().loads(json.dumps({"message": e.messages.__str__()}))
-        return error, error.get("code")
+        return content_negociation(error, error.get("code"))
     
     try:
-        return genres_service.modify_genre(id, genre_update)
+        return content_negociation(*genres_service.update_genre(id, genre_update))
     except Exception:
         error = SomethingWentWrongSchema().loads("{}")
-        return error, error.get("code")
+        return content_negociation(error, error.get("code"))
   
 @genres.route('/', methods=['POST'])
 @login_required
@@ -217,9 +218,9 @@ def post_genre():
         genre_create = GenreUpdateSchema().loads(request.data)
     except ValidationError as err:
         error = UnprocessableEntitySchema().loads(json.dumps(err.messages))
-        return error, error.get("code")
+        return content_negociation(error, error.get("code"))
 
-    return genres_service.create_genre(genre_create)
+    return content_negociation(*genres_service.create_genre(genre_create))
 
 
 
@@ -262,7 +263,7 @@ def delete_genre(id):
       tags:
           - genres
     """
-    return genres_service.delete_genre(id)
+    return content_negociation(*genres_service.delete_genre(id))
   
   
   

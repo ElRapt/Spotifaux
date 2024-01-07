@@ -12,7 +12,7 @@ from schemas.errors import *
 
 # Create an APISpec
 spec = APISpec(
-    title="Tchipify",
+    title="Spotifaux",
     version="1.0.0",
     openapi_version="3.0.2",
     plugins=[FlaskPlugin(), MarshmallowPlugin()],
