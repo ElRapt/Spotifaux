@@ -5,6 +5,7 @@ import (
 	"errors"
 	"middleware/example/internal/helpers"
 	"middleware/example/internal/models"
+	"net/http"
 
 	"github.com/gofrs/uuid"
 )
@@ -45,8 +46,13 @@ func GetGenreById(id uuid.UUID) (*models.Genre, error) {
 	err = db.QueryRow("SELECT * FROM Genre WHERE id = ?", id).Scan(&g.Id, &g.Name)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			return nil, nil
+			// When no genre is found, return nil and a custom error
+			return nil, &models.CustomError{
+				Message: "Genre not found",
+				Code:    http.StatusNotFound,
+			}
 		}
+		// Handle other types of errors
 		return nil, err
 	}
 

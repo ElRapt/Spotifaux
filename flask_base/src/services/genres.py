@@ -13,7 +13,6 @@ def get_genre(id):
     response = requests.request(method="GET", url=genres_url+id)
     if response.status_code != 200:
         return response.json(), response.status_code
-    return response.json(), 200
 
 def get_genres():
     response = requests.request(method="GET", url=genres_url)
