@@ -2,8 +2,10 @@ package musics
 
 import (
 	"database/sql"
+	"errors"
 	"middleware/example/internal/helpers"
 	"middleware/example/internal/models"
+	"strings"
 
 	"github.com/gofrs/uuid"
 )
@@ -83,7 +85,35 @@ func PutMusic(id uuid.UUID, updatedMusic models.Music) error {
 	}
 	defer helpers.CloseDB(db)
 
-	_, err = db.Exec("UPDATE Music SET title = ?, genreId = ?, artistId = ?, albumId = ? WHERE id = ?", updatedMusic.Title, updatedMusic.GenreId, updatedMusic.ArtistId, updatedMusic.AlbumId, id)
+	var updateParts []string
+	var args []interface{}
+
+	if updatedMusic.Title != "" {
+		updateParts = append(updateParts, "title = ?")
+		args = append(args, updatedMusic.Title)
+	}
+	if updatedMusic.GenreId != uuid.Nil {
+		updateParts = append(updateParts, "genreId = ?")
+		args = append(args, updatedMusic.GenreId)
+	}
+	if updatedMusic.ArtistId != uuid.Nil {
+		updateParts = append(updateParts, "artistId = ?")
+		args = append(args, updatedMusic.ArtistId)
+	}
+	if updatedMusic.AlbumId != uuid.Nil {
+		updateParts = append(updateParts, "albumId = ?")
+		args = append(args, updatedMusic.AlbumId)
+	}
+
+	if len(updateParts) == 0 {
+		// No fields to update
+		return errors.New("no fields provided for update")
+	}
+
+	updateQuery := "UPDATE Music SET " + strings.Join(updateParts, ", ") + " WHERE id = ?"
+	args = append(args, id)
+
+	_, err = db.Exec(updateQuery, args...)
 	return err
 }
 
