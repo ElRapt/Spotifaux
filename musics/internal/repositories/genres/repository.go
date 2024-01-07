@@ -2,6 +2,7 @@ package genres
 
 import (
 	"database/sql"
+	"errors"
 	"middleware/example/internal/helpers"
 	"middleware/example/internal/models"
 
@@ -76,15 +77,34 @@ func PostGenre(newGenre models.Genre) (uuid.UUID, error) {
 	return newGenre.Id, nil
 }
 
-func PutGenre(id uuid.UUID, updatedGenre models.Genre) error {
+func PutGenre(genreId uuid.UUID, name string) (models.Genre, error) {
 	db, err := helpers.OpenDB()
 	if err != nil {
-		return err
+		return models.Genre{}, err
 	}
-	defer helpers.CloseDB(db)
+	defer db.Close()
 
-	_, err = db.Exec("UPDATE Genre SET name = ? WHERE id = ?", updatedGenre.Name, id)
-	return err
+	if name == "" {
+		return models.Genre{}, errors.New("no fields to update")
+	}
+
+	// Execute the update query
+	_, err = db.Exec("UPDATE Genre SET name = ? WHERE id = ?", name, genreId)
+	if err != nil {
+		return models.Genre{}, err
+	}
+
+	// Retrieve the updated genre
+	var updatedGenre models.Genre
+	err = db.QueryRow("SELECT id, name FROM Genre WHERE id = ?", genreId).Scan(&updatedGenre.Id, &updatedGenre.Name)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return models.Genre{}, errors.New("genre not found")
+		}
+		return models.Genre{}, err
+	}
+
+	return updatedGenre, nil
 }
 
 func DeleteGenre(id uuid.UUID) error {

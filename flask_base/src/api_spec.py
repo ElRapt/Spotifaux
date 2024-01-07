@@ -5,6 +5,7 @@ from apispec import APISpec
 from apispec.ext.marshmallow import MarshmallowPlugin
 from apispec_webframeworks.flask import FlaskPlugin
 from schemas.user import *
+from schemas.genre import *
 from schemas.user_auth import *
 from schemas.errors import *
 
@@ -29,7 +30,8 @@ spec.components.schema("NotFound", schema=NotFoundSchema)
 spec.components.schema("Conflict", schema=ConflictSchema)
 spec.components.schema("UnprocessableEntity", schema=UnprocessableEntitySchema)
 spec.components.schema("SomethingWentWrong", schema=SomethingWentWrongSchema)
-
+spec.components.schema("Genre", schema=GenreSchema)
+spec.components.schema("GenreUpdate", schema=GenreUpdateSchema)
 
 # add swagger tags that are used for endpoint annotation
 tags = [
@@ -44,6 +46,10 @@ tags = [
     {
         "name": "musics",
         "description": "Managing musics"
+    },
+    {
+        "name": "genres",
+        "description": "Managing genres"
     }
 ]
 

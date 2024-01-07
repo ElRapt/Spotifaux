@@ -3,11 +3,12 @@ package genres
 import (
 	"database/sql"
 	"errors"
-	"github.com/gofrs/uuid"
-	"github.com/sirupsen/logrus"
 	"middleware/example/internal/models"
 	repository "middleware/example/internal/repositories/genres"
 	"net/http"
+
+	"github.com/gofrs/uuid"
+	"github.com/sirupsen/logrus"
 )
 
 func GetAllGenres() ([]models.Genre, error) {
@@ -55,14 +56,20 @@ func PostGenre(newGenre models.Genre) (uuid.UUID, error) {
 	return genreId, nil
 }
 
-func PutGenre(id uuid.UUID, newGenre models.Genre) error {
-	err := repository.PutGenre(id, newGenre)
-	if err != nil {
-		logrus.Errorf("error putting genre: %s", err.Error())
-		return &models.CustomError{
-			Message: "Something went wrong",
-			Code:    http.StatusInternalServerError,
+func PutGenre(partialGenre models.Genre) (models.Genre, error) {
+
+	var genre models.Genre
+	var err2 error
+
+	genre, err2 = repository.PutGenre(partialGenre.Id, partialGenre.Name)
+
+	if err2 != nil {
+		logrus.Errorf("error updating Genre: %s", err2.Error())
+		return models.Genre{}, &models.CustomError{
+			Message: "Error updating Genre",
+			Code:    500,
 		}
 	}
-	return nil
+
+	return genre, nil
 }

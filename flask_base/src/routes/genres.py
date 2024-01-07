@@ -95,7 +95,7 @@ def put_genre(id):
     """
     ---
     put:
-      description: Modify a genre
+      description: Updating a genre
       parameters:
         - in: path
           name: id
@@ -106,10 +106,8 @@ def put_genre(id):
       requestBody:
         required: true
         content:
-          application/json:
-            schema: GenreUpdate
-          application/yaml:
-            schema: GenreUpdate
+            application/json:
+                schema: GenreUpdateSchema
       responses:
         '200':
           description: Ok
@@ -118,13 +116,6 @@ def put_genre(id):
               schema: Genre
             application/yaml:
               schema: Genre
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema: BadRequest
-            application/yaml:
-              schema: BadRequest
         '401':
           description: Unauthorized
           content:
@@ -139,17 +130,35 @@ def put_genre(id):
               schema: NotFound
             application/yaml:
               schema: NotFound
+        '422':
+          description: Unprocessable entity
+          content:
+            application/json:
+              schema: UnprocessableEntity
+            application/yaml:
+              schema: UnprocessableEntity
+        '500':
+          description: Something went wrong
+          content:
+            application/json:
+              schema: SomethingWentWrong
+            application/yaml:
+              schema: SomethingWentWrong
       tags:
           - genres
     """
+    # parser le body
     try:
-        genre_update = GenreUpdateSchema().loads(request.data)
-    except ValidationError as err:
-        error = UnprocessableEntitySchema().loads(json.dumps(err.messages))
+        genre_update = GenreUpdateSchema().loads(json_data=request.data.decode('utf-8'))
+    except ValidationError as e:
+        error = UnprocessableEntitySchema().loads(json.dumps({"message": e.messages.__str__()}))
         return error, error.get("code")
-
-    return genres_service.modify_genre(id, genre_update)
-  
+    
+    try:
+        return genres_service.modify_genre(id, genre_update)
+    except Exception:
+        error = SomethingWentWrongSchema().loads("{}")
+        return error, error.get("code")
   
 @genres.route('/', methods=['POST'])
 @login_required
@@ -254,3 +263,6 @@ def delete_genre(id):
           - genres
     """
     return genres_service.delete_genre(id)
+  
+  
+  
