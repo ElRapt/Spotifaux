@@ -5,6 +5,7 @@ from routes.users import users as users_route
 from routes.musics import musics as musics_route
 from routes.genres import genres as genres_route
 from routes.artists import artists as artists_route
+from routes.albums import albums as albums_route
 from routes.auth import auth as auth_route
 from routes.swagger import swagger_ui_blueprint, SWAGGER_URL
 from api_spec import spec
@@ -19,6 +20,7 @@ app.register_blueprint(users_route, url_prefix="/users")
 app.register_blueprint(musics_route, url_prefix="/musics")
 app.register_blueprint(genres_route, url_prefix="/genres")
 app.register_blueprint(artists_route, url_prefix="/artists")
+app.register_blueprint(albums_route, url_prefix="/albums")
 
 
 # allows to generate Swagger doc for all documented functions

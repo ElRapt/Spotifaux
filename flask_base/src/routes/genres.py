@@ -67,9 +67,9 @@ def get_genres():
         required: true
         content:
             application/json:
-                schema: GenreUpdate
+                schema: GenreUpdateSchema
             application/yaml:
-                schema: GenreUpdate
+                schema: GenreUpdateSchema
       responses:
         '200':
           description: Ok
@@ -179,9 +179,9 @@ def post_genre():
         required: true
         content:
           application/json:
-            schema: GenreUpdate
+            schema: GenreUpdateSchema
           application/yaml:
-            schema: GenreUpdate
+            schema: GenreUpdateSchema
       responses:
         '201':
           description: Created

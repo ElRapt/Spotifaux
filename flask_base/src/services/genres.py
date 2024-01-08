@@ -13,6 +13,7 @@ def get_genre(id):
     response = requests.request(method="GET", url=genres_url+id)
     if response.status_code != 200:
         return response.json(), response.status_code
+    return response.json(), 200
 
 def get_genres():
     response = requests.request(method="GET", url=genres_url)
@@ -25,6 +26,7 @@ def create_genre(genre_register):
     response = requests.request(method="POST", url=genres_url, json=genre_schema)
     if response.status_code != 201:
         return response.json(), response.status_code
+    return response.json(), 201
 
 
 def modify_genre(id, genre_update):
