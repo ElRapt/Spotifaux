@@ -24,18 +24,18 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/songs/{song_id}/ratings": {
+        "/musics/{music_id}/ratings": {
             "get": {
-                "description": "Get song ratings.",
+                "description": "Get music ratings.",
                 "tags": [
                     "ratings"
                 ],
-                "summary": "Get song ratings.",
+                "summary": "Get music ratings.",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Song UUID formatted ID",
-                        "name": "song_id",
+                        "description": "Music UUID formatted ID",
+                        "name": "music_id",
                         "in": "path",
                         "required": true
                     }
@@ -59,16 +59,16 @@ const docTemplate = `{
                 }
             },
             "post": {
-                "description": "Post a song rating.",
+                "description": "Post a music rating.",
                 "tags": [
                     "ratings"
                 ],
-                "summary": "Post a song rating.",
+                "summary": "Post a music rating.",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Song UUID formatted ID",
-                        "name": "song_id",
+                        "description": "Music UUID formatted ID",
+                        "name": "music_id",
                         "in": "path",
                         "required": true
                     },
@@ -98,18 +98,18 @@ const docTemplate = `{
                 }
             }
         },
-        "/songs/{song_id}/ratings/{rating_id}": {
+        "/musics/{music_id}/ratings/{rating_id}": {
             "get": {
-                "description": "Get a song rating.",
+                "description": "Get a music rating.",
                 "tags": [
                     "ratings"
                 ],
-                "summary": "Get a song rating.",
+                "summary": "Get a music rating.",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Song UUID formatted ID",
-                        "name": "song_id",
+                        "description": "Music UUID formatted ID",
+                        "name": "music_id",
                         "in": "path",
                         "required": true
                     },
@@ -140,16 +140,16 @@ const docTemplate = `{
                 }
             },
             "put": {
-                "description": "Modify a song rating.",
+                "description": "Modify a music rating.",
                 "tags": [
                     "ratings"
                 ],
-                "summary": "Modify a song rating.",
+                "summary": "Modify a music rating.",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Song UUID formatted ID",
-                        "name": "song_id",
+                        "description": "Music UUID formatted ID",
+                        "name": "music_id",
                         "in": "path",
                         "required": true
                     },
@@ -189,16 +189,16 @@ const docTemplate = `{
                 }
             },
             "delete": {
-                "description": "Delete a song rating.",
+                "description": "Delete a music rating.",
                 "tags": [
                     "ratings"
                 ],
-                "summary": "Delete a song rating.",
+                "summary": "Delete a music rating.",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Song UUID formatted ID",
-                        "name": "song_id",
+                        "description": "Music UUID formatted ID",
+                        "name": "music_id",
                         "in": "path",
                         "required": true
                     },
@@ -240,7 +240,7 @@ const docTemplate = `{
                 "rating_date": {
                     "type": "string"
                 },
-                "song_id": {
+                "music_id": {
                     "type": "string"
                 },
                 "user_id": {
