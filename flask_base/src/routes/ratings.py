@@ -4,6 +4,7 @@ from flask import Blueprint, request
 from flask_login import login_required
 from marshmallow import ValidationError
 
+from helpers.content_negotiation import content_negotiation
 from models.http_exceptions import *
 from schemas.errors import *
 import services.ratings as ratings_service
