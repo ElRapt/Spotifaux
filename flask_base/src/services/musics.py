@@ -9,6 +9,13 @@ from models.http_exceptions import *
 
 musics_url = "http://localhost:8081/musics/"  # URL de l'API music (golang)
 
+def music_exists(song_id):
+    response = requests.request(method="GET", url=musics_url+song_id)
+    if response.status_code == 200:
+        return True
+    elif response.status_code == 422:
+        raise UnprocessableEntity
+    return False
 
 def get_music(id):
     response = requests.request(method="GET", url=musics_url+id)
