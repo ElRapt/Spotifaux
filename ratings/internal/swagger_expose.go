@@ -4,8 +4,8 @@ package internal
 // @version      1.0.0
 // @description  API to manage ratings.
 
-// @contact.name   Mark Ballereau
-// @contact.email  mark.ballereau@etu.uca.fr
+// @contact.name   Moran Toulisse
+// @contact.email  moran.toulisse@etu.uca.fr
 
 // @schemes   http
 // @BasePath  /

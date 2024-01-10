@@ -1,17 +1,18 @@
 package ratings
 
 import (
-	"github.com/gofrs/uuid"
 	"middleware/example/internal/helpers"
 	"middleware/example/internal/models"
+
+	"github.com/gofrs/uuid"
 )
 
-func GetAllRatingsForASong(songID uuid.UUID) ([]models.Rating, error) {
+func GetAllRatingsForAMusic(musicID uuid.UUID) ([]models.Rating, error) {
 	db, err := helpers.OpenDB()
 	if err != nil {
 		return nil, err
 	}
-	rows, err := db.Query("SELECT * FROM ratings WHERE song_id=?", songID.String())
+	rows, err := db.Query("SELECT * FROM ratings WHERE music_id=?", musicID.String())
 	helpers.CloseDB(db)
 	if err != nil {
 		return nil, err
@@ -21,7 +22,7 @@ func GetAllRatingsForASong(songID uuid.UUID) ([]models.Rating, error) {
 	ratings := []models.Rating{}
 	for rows.Next() {
 		var data models.Rating
-		err = rows.Scan(&data.Id, &data.Comment, &data.Rating, &data.RatingDate, &data.SongID, &data.UserID)
+		err = rows.Scan(&data.Id, &data.Comment, &data.Rating, &data.RatingDate, &data.MusicID, &data.UserID)
 		if err != nil {
 			return nil, err
 		}
@@ -33,29 +34,29 @@ func GetAllRatingsForASong(songID uuid.UUID) ([]models.Rating, error) {
 	return ratings, err
 }
 
-func GetSongRating(songID uuid.UUID, ratingID uuid.UUID) (*models.Rating, error) {
+func GetMusicRating(musicID uuid.UUID, ratingID uuid.UUID) (*models.Rating, error) {
 	db, err := helpers.OpenDB()
 	if err != nil {
 		return nil, err
 	}
-	row := db.QueryRow("SELECT * FROM ratings WHERE song_id=? AND id=?", songID.String(), ratingID.String())
+	row := db.QueryRow("SELECT * FROM ratings WHERE music_id=? AND id=?", musicID.String(), ratingID.String())
 	helpers.CloseDB(db)
 
 	var rating models.Rating
-	err = row.Scan(&rating.Id, &rating.Comment, &rating.Rating, &rating.RatingDate, &rating.SongID, &rating.UserID)
+	err = row.Scan(&rating.Id, &rating.Comment, &rating.Rating, &rating.RatingDate, &rating.MusicID, &rating.UserID)
 	if err != nil {
 		return nil, err
 	}
 	return &rating, err
 }
 
-func AddSongRating(newRating models.Rating) error {
+func AddMusicRating(newRating models.Rating) error {
 	db, err := helpers.OpenDB()
 	if err != nil {
 		return err
 	}
 
-	_, err = db.Exec("INSERT INTO ratings (id, comment, rating, rating_date, song_id, user_id) VALUES (?, ?, ?, ?, ?, ?);", newRating.Id.String(), newRating.Comment, newRating.Rating, newRating.RatingDate, newRating.SongID.String(), newRating.UserID.String())
+	_, err = db.Exec("INSERT INTO ratings (id, comment, rating, rating_date, music_id, user_id) VALUES (?, ?, ?, ?, ?, ?);", newRating.Id.String(), newRating.Comment, newRating.Rating, newRating.RatingDate, newRating.MusicID.String(), newRating.UserID.String())
 	if err != nil {
 		return err
 	}
@@ -65,7 +66,7 @@ func AddSongRating(newRating models.Rating) error {
 	return nil
 }
 
-func ModifySongRating(songID uuid.UUID, ratingID uuid.UUID, newRatingData models.RatingRequest) (*models.Rating, error) {
+func ModifyMusicRating(musicID uuid.UUID, ratingID uuid.UUID, newRatingData models.RatingRequest) (*models.Rating, error) {
 	db, err := helpers.OpenDB()
 	if err != nil {
 		return nil, err
@@ -77,7 +78,7 @@ func ModifySongRating(songID uuid.UUID, ratingID uuid.UUID, newRatingData models
 	}
 
 	if newRatingData.Rating != nil {
-		_, err = tx.Exec("UPDATE ratings SET rating=? WHERE song_id=? AND id=?;", newRatingData.Rating, songID.String(), ratingID.String())
+		_, err = tx.Exec("UPDATE ratings SET rating=? WHERE music_id=? AND id=?;", newRatingData.Rating, musicID.String(), ratingID.String())
 		if err != nil {
 			tx.Rollback()
 			return nil, err
@@ -85,7 +86,7 @@ func ModifySongRating(songID uuid.UUID, ratingID uuid.UUID, newRatingData models
 	}
 
 	if newRatingData.Comment != nil {
-		_, err = tx.Exec("UPDATE ratings SET comment=? WHERE song_id=? AND id=?;", newRatingData.Comment, songID.String(), ratingID.String())
+		_, err = tx.Exec("UPDATE ratings SET comment=? WHERE music_id=? AND id=?;", newRatingData.Comment, musicID.String(), ratingID.String())
 		if err != nil {
 			tx.Rollback()
 			return nil, err
@@ -93,16 +94,16 @@ func ModifySongRating(songID uuid.UUID, ratingID uuid.UUID, newRatingData models
 	}
 
 	if newRatingData.UserID != nil {
-		_, err = tx.Exec("UPDATE ratings SET user_id=? WHERE song_id=? AND id=?;", newRatingData.UserID, songID.String(), ratingID.String())
+		_, err = tx.Exec("UPDATE ratings SET user_id=? WHERE music_id=? AND id=?;", newRatingData.UserID, musicID.String(), ratingID.String())
 		if err != nil {
 			tx.Rollback()
 			return nil, err
 		}
 	}
 
-	row := tx.QueryRow("SELECT * FROM ratings WHERE song_id=? AND id=?", songID.String(), ratingID.String())
+	row := tx.QueryRow("SELECT * FROM ratings WHERE music_id=? AND id=?", musicID.String(), ratingID.String())
 	var rating models.Rating
-	err = row.Scan(&rating.Id, &rating.Comment, &rating.Rating, &rating.RatingDate, &rating.SongID, &rating.UserID)
+	err = row.Scan(&rating.Id, &rating.Comment, &rating.Rating, &rating.RatingDate, &rating.MusicID, &rating.UserID)
 	if err != nil {
 		tx.Rollback()
 		return nil, err
@@ -118,13 +119,13 @@ func ModifySongRating(songID uuid.UUID, ratingID uuid.UUID, newRatingData models
 	return &rating, err
 }
 
-func DeleteSongRating(songID uuid.UUID, ratingID uuid.UUID) error {
+func DeleteMusicRating(musicID uuid.UUID, ratingID uuid.UUID) error {
 	db, err := helpers.OpenDB()
 	if err != nil {
 		return err
 	}
 
-	_, err = db.Exec("DELETE FROM ratings WHERE song_id=? AND id=?", songID.String(), ratingID.String())
+	_, err = db.Exec("DELETE FROM ratings WHERE music_id=? AND id=?", musicID.String(), ratingID.String())
 	if err != nil {
 		return err
 	}

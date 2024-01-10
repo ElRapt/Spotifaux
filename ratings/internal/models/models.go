@@ -1,8 +1,9 @@
 package models
 
 import (
-	"github.com/gofrs/uuid"
 	"time"
+
+	"github.com/gofrs/uuid"
 )
 
 type Rating struct {
@@ -10,7 +11,7 @@ type Rating struct {
 	Comment    string    `json:"comment"`
 	Rating     int       `json:"rating"`
 	RatingDate time.Time `json:"rating_date"`
-	SongID     uuid.UUID `json:"song_id"`
+	MusicID    uuid.UUID `json:"music_id"`
 	UserID     uuid.UUID `json:"user_id"`
 }
 

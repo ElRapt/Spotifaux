@@ -3,18 +3,19 @@ package ratings
 import (
 	"database/sql"
 	"fmt"
-	"github.com/gofrs/uuid"
-	"github.com/sirupsen/logrus"
 	"middleware/example/internal/models"
 	repository "middleware/example/internal/repositories/ratings"
 	"net/http"
 	"time"
+
+	"github.com/gofrs/uuid"
+	"github.com/sirupsen/logrus"
 )
 
-func GetAllRatingsForASong(songID uuid.UUID) ([]models.Rating, error) {
+func GetAllRatingsForAMusic(musicID uuid.UUID) ([]models.Rating, error) {
 	var err error
 	// calling repository
-	ratings, err := repository.GetAllRatingsForASong(songID)
+	ratings, err := repository.GetAllRatingsForAMusic(musicID)
 	// managing errors
 	if err != nil {
 		logrus.Errorf("error retrieving ratings : %s", err.Error())
@@ -27,8 +28,8 @@ func GetAllRatingsForASong(songID uuid.UUID) ([]models.Rating, error) {
 	return ratings, nil
 }
 
-func GetSongRating(songID uuid.UUID, ratingID uuid.UUID) (*models.Rating, error) {
-	rating, err := repository.GetSongRating(songID, ratingID)
+func GetMusicRating(musicID uuid.UUID, ratingID uuid.UUID) (*models.Rating, error) {
+	rating, err := repository.GetMusicRating(musicID, ratingID)
 	if err != nil {
 		if err.Error() == sql.ErrNoRows.Error() {
 			return nil, &models.CustomError{
@@ -46,7 +47,7 @@ func GetSongRating(songID uuid.UUID, ratingID uuid.UUID) (*models.Rating, error)
 	return rating, err
 }
 
-func AddSongRating(songID uuid.UUID, ratingRequest models.RatingRequest) (*models.Rating, error) {
+func AddMusicRating(musicID uuid.UUID, ratingRequest models.RatingRequest) (*models.Rating, error) {
 	if ratingRequest.Comment == nil || ratingRequest.Rating == nil || ratingRequest.UserID == nil {
 		return nil, &models.CustomError{
 			Message: "missing fields",
@@ -84,11 +85,11 @@ func AddSongRating(songID uuid.UUID, ratingRequest models.RatingRequest) (*model
 		Comment:    *ratingRequest.Comment,
 		Rating:     *ratingRequest.Rating,
 		RatingDate: time.Now(),
-		SongID:     songID,
+		MusicID:    musicID,
 		UserID:     userID,
 	}
 
-	err = repository.AddSongRating(newRating)
+	err = repository.AddMusicRating(newRating)
 	if err != nil {
 		logrus.Errorf("Error adding rating : %s", err.Error())
 		return nil, &models.CustomError{
@@ -100,7 +101,7 @@ func AddSongRating(songID uuid.UUID, ratingRequest models.RatingRequest) (*model
 	return &newRating, err
 }
 
-func ModifySongRating(songID uuid.UUID, ratingID uuid.UUID, ratingRequest models.RatingRequest) (*models.Rating, error) {
+func ModifyMusicRating(musicID uuid.UUID, ratingID uuid.UUID, ratingRequest models.RatingRequest) (*models.Rating, error) {
 	if ratingRequest.Rating != nil {
 		if *ratingRequest.Rating < 0 || *ratingRequest.Rating > 5 {
 			return nil, &models.CustomError{
@@ -121,7 +122,7 @@ func ModifySongRating(songID uuid.UUID, ratingID uuid.UUID, ratingRequest models
 		}
 	}
 
-	rating, err := repository.ModifySongRating(songID, ratingID, ratingRequest)
+	rating, err := repository.ModifyMusicRating(musicID, ratingID, ratingRequest)
 	if err != nil {
 		if err.Error() == sql.ErrNoRows.Error() {
 			return nil, &models.CustomError{
@@ -139,10 +140,10 @@ func ModifySongRating(songID uuid.UUID, ratingID uuid.UUID, ratingRequest models
 	return rating, err
 }
 
-func DeleteSongRating(songID uuid.UUID, ratingID uuid.UUID) error {
-	err := repository.DeleteSongRating(songID, ratingID)
+func DeleteMusicRating(musicID uuid.UUID, ratingID uuid.UUID) error {
+	err := repository.DeleteMusicRating(musicID, ratingID)
 	if err != nil {
-		logrus.Errorf("Error deleting song : %s", err.Error())
+		logrus.Errorf("Error deleting music : %s", err.Error())
 		return &models.CustomError{
 			Message: "Something went wrong",
 			Code:    http.StatusInternalServerError,
