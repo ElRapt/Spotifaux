@@ -2,28 +2,29 @@ package ratings
 
 import (
 	"encoding/json"
-	"github.com/gofrs/uuid"
-	"github.com/sirupsen/logrus"
 	"middleware/example/internal/models"
 	"middleware/example/internal/services/ratings"
 	"net/http"
+
+	"github.com/gofrs/uuid"
+	"github.com/sirupsen/logrus"
 )
 
-// GetSongRatings
+// GetMusicRatings
 // @Tags         ratings
-// @Summary      Get song ratings.
-// @Description  Get song ratings.
-// @Param        song_id        path     string  true   "Song UUID formatted ID"
+// @Summary      Get music ratings.
+// @Description  Get music ratings.
+// @Param        music_id        path     string  true   "Music UUID formatted ID"
 // @Success      200            {array}  models.Rating
 // @Failure      422            "Cannot parse id"
 // @Failure      500            "Something went wrong"
-// @Router       /songs/{song_id}/ratings [get]
-func GetSongRatings(w http.ResponseWriter, r *http.Request) {
+// @Router       /musics/{music_id}/ratings [get]
+func GetMusicRatings(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	songID, _ := ctx.Value("songID").(uuid.UUID)
+	musicID, _ := ctx.Value("musicID").(uuid.UUID)
 
 	// calling service
-	ratings, err := ratings.GetAllRatingsForASong(songID)
+	ratings, err := ratings.GetAllRatingsForAMusic(musicID)
 	if err != nil {
 		// logging error
 		logrus.Errorf("error : %s", err.Error())

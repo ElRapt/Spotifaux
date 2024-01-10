@@ -2,30 +2,31 @@ package ratings
 
 import (
 	"encoding/json"
-	"github.com/gofrs/uuid"
-	"github.com/sirupsen/logrus"
 	"middleware/example/internal/models"
 	"middleware/example/internal/services/ratings"
 	"net/http"
+
+	"github.com/gofrs/uuid"
+	"github.com/sirupsen/logrus"
 )
 
-// GetSongRating
+// GetMusicRating
 // @Tags         ratings
-// @Summary      Get a song rating.
-// @Description  Get a song rating.
-// @Param        song_id        path      string  true  "Song UUID formatted ID"
-// @Param        rating_id      path      string  true  "Rating UUID formatted ID"
+// @Summary      Get a music rating.
+// @Description  Get a music rating.
+// @Param        music_id        path      string  true  "Music UUID formatted ID"
+// @Param        rating_id      path      string  true   "Rating UUID formatted ID"
 // @Success      200            {object}  models.Rating
 // @Failure      404            "Rating not found"
 // @Failure      422            "Cannot parse id"
 // @Failure      500            "Something went wrong"
-// @Router       /songs/{song_id}/ratings/{rating_id} [get]
-func GetSongRating(w http.ResponseWriter, r *http.Request) {
+// @Router       /musics/{music_id}/ratings/{rating_id} [get]
+func GetMusicRating(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	songID, _ := ctx.Value("songID").(uuid.UUID)
+	musicID, _ := ctx.Value("musicID").(uuid.UUID)
 	ratingID, _ := ctx.Value("ratingID").(uuid.UUID)
 
-	rating, err := ratings.GetSongRating(songID, ratingID)
+	rating, err := ratings.GetMusicRating(musicID, ratingID)
 	if err != nil {
 		logrus.Errorf("error : %s", err.Error())
 		customError, isCustom := err.(*models.CustomError)

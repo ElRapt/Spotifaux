@@ -2,30 +2,31 @@ package ratings
 
 import (
 	"encoding/json"
-	"github.com/gofrs/uuid"
-	"github.com/sirupsen/logrus"
 	"middleware/example/internal/models"
 	"middleware/example/internal/services/ratings"
 	"net/http"
+
+	"github.com/gofrs/uuid"
+	"github.com/sirupsen/logrus"
 )
 
-// PostSongRating
+// PostMusicRating
 // @Tags         ratings
-// @Summary      Post a song rating.
-// @Description  Post a song rating.
-// @Param        song_id        path      	string  				true  	"Song UUID formatted ID"
+// @Summary      Post a music rating.
+// @Description  Post a music rating.
+// @Param        music_id        path      	string  				true  	"Music UUID formatted ID"
 // @Param        ratingRequest  body  		models.RatingRequest 	true	"rating request"
 // @Success      200            {object}  	models.Rating
 // @Failure      422            "Cannot parse id"
 // @Failure      422            "missing fields"
 // @Failure      422            "rating must be between 0 and 5"
 // @Failure      500            "Something went wrong"
-// @Router       /songs/{song_id}/ratings [post]
-func PostSongRating(w http.ResponseWriter, r *http.Request) {
+// @Router       /musics/{music_id}/ratings [post]
+func PostMusicRating(w http.ResponseWriter, r *http.Request) {
 	var ratingRequest models.RatingRequest
 
 	ctx := r.Context()
-	songID, _ := ctx.Value("songID").(uuid.UUID)
+	musicID, _ := ctx.Value("musicID").(uuid.UUID)
 
 	err := json.NewDecoder(r.Body).Decode(&ratingRequest)
 	if err != nil {
@@ -35,7 +36,7 @@ func PostSongRating(w http.ResponseWriter, r *http.Request) {
 	}
 	defer r.Body.Close()
 
-	rating, err := ratings.AddSongRating(songID, ratingRequest)
+	rating, err := ratings.AddMusicRating(musicID, ratingRequest)
 	if err != nil {
 		logrus.Errorf("error : %s", err.Error())
 		customError, isCustom := err.(*models.CustomError)
@@ -51,7 +52,7 @@ func PostSongRating(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 
-	ratingURL := "/songs/" + rating.SongID.String() + "/ratings/" + rating.Id.String()
+	ratingURL := "/musics/" + rating.MusicID.String() + "/ratings/" + rating.Id.String()
 	w.Header().Set("Location", ratingURL)
 
 	w.WriteHeader(http.StatusCreated)
