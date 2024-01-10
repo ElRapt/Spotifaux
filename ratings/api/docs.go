@@ -16,8 +16,8 @@ const docTemplate = `{
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
         "contact": {
-            "name": "Mark Ballereau",
-            "email": "mark.ballereau@etu.uca.fr"
+            "name": "Moran Toulisse",
+            "email": "moran.toulisse@etu.uca.fr"
         },
         "version": "{{.Version}}"
     },
