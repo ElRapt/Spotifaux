@@ -9,7 +9,7 @@ from models.http_exceptions import *
 
 
 
-artists_url = "http://localhost:8081/artists"  # URL de l'API artist (golang)
+artists_url = "http://localhost:8081/artists/"  # URL de l'API artist (golang)
 
 
 def get_artist(id):

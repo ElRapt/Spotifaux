@@ -7,12 +7,14 @@ from flask_login import current_user
 from schemas.music import MusicSchema
 from models.http_exceptions import *
 
-musics_url = "http://localhost:8081/musics"  # URL de l'API music (golang)
+musics_url = "http://localhost:8081/musics/"  # URL de l'API music (golang)
 
 
 def get_music(id):
     response = requests.request(method="GET", url=musics_url+id)
-    return response.json(), response.status_code
+    if response.status_code != 200:
+        return response.json(), response.status_code
+    return response.json(), 200
 
 def get_musics():
     response = requests.request(method="GET", url=musics_url)
