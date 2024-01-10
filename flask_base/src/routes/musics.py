@@ -25,9 +25,9 @@ def get_musics():
           description: Ok
           content:
             application/json:
-              schema: Genre
+              schema: MusicSchema
             application/yaml:
-              schema: Genre
+              schema: MusicSchema
         '401':
           description: Unauthorized
           content:
@@ -59,9 +59,9 @@ def get_music(id):
           description: Ok
           content:
             application/json:
-              schema: Music
+              schema: MusicSchema
             application/yaml:
-              schema: Music
+              schema: MusicSchema
         '401':
           description: Unauthorized
           content:
@@ -101,7 +101,7 @@ def put_music(id):
         required: true
         content:
             application/json:
-                schema: MusicUpdate
+                schema: MusicUpdateSchema
       responses:
         '200':
           description: Ok
@@ -148,7 +148,7 @@ def put_music(id):
         error = UnprocessableEntitySchema().loads(json.dumps(err.messages))
         return content_negotiation(error, error.get("code"))
 
-    return content_negotiation(*musics_service.put_music(id, music_update))
+    return content_negotiation(*musics_service.modify_music(id, music_update))
   
 @musics.route('/<id>', methods=['DELETE'])
 @login_required
@@ -204,15 +204,15 @@ def post_music():
         required: true
         content:
             application/json:
-                schema: MusicRegister
+                schema: MusicUpdateSchema
       responses:
         '201':
           description: Created
           content:
             application/json:
-              schema: Music
+              schema: MusicSchema
             application/yaml:
-              schema: Music
+              schema: MusicSchema
         '401':
           description: Unauthorized
           content:

@@ -63,21 +63,14 @@ def get_genres():
     ---
     get:
       description: Getting all genres
-      requestBody:
-        required: true
-        content:
-            application/json:
-                schema: GenreUpdateSchema
-            application/yaml:
-                schema: GenreUpdateSchema
       responses:
         '200':
           description: Ok
           content:
             application/json:
-              schema: Genre
+              schema: GenreSchema
             application/yaml:
-              schema: Genre
+              schema: GenreSchema
         '401':
           description: Unauthorized
           content:
@@ -114,9 +107,9 @@ def put_genre(id):
           description: Ok
           content:
             application/json:
-              schema: Genre
+              schema: GenreSchema
             application/yaml:
-              schema: Genre
+              schema: GenreSchema
         '401':
           description: Unauthorized
           content:
@@ -187,9 +180,9 @@ def post_genre():
           description: Created
           content:
             application/json:
-              schema: Genre
+              schema: GenreSchema
             application/yaml:
-              schema: Genre
+              schema: GenreSchema
         '400':
           description: Bad request
           content:
@@ -243,9 +236,9 @@ def delete_genre(id):
           description: Ok
           content:
             application/json:
-              schema: Genre
+              schema: GenreSchema
             application/yaml:
-              schema: Genre
+              schema: GenreSchema
         '401':
           description: Unauthorized
           content:

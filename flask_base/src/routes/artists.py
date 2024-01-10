@@ -31,9 +31,9 @@ def get_artist(id):
           description: Ok
           content:
             application/json:
-              schema: Artist
+              schema: ArtistSchema
             application/yaml:
-              schema: Artist
+              schema: ArtistSchema
         '401':
           description: Unauthorized
           content:
@@ -65,9 +65,9 @@ def get_artists():
           description: Ok
           content:
             application/json:
-              schema: artist
+              schema: ArtistSchema
             application/yaml:
-              schema: artist
+              schema: ArtistSchema
         '401':
           description: Unauthorized
           content:
@@ -106,9 +106,9 @@ def put_artist(id):
           description: Ok
           content:
             application/json:
-              schema: Artist
+              schema: ArtistSchema
             application/yaml:
-              schema: Artist
+              schema: ArtistSchema
         '400':
           description: Bad request
           content:
@@ -139,7 +139,7 @@ def put_artist(id):
         error = UnprocessableEntitySchema().loads(json.dumps(err.messages))
         return content_negotiation(error, error.get("code"))
 
-    return content_negotiation(*artists_service.update_artist(id, artist_update))
+    return content_negotiation(*artists_service.modify_artist(id, artist_update))
   
 
 @artists.route('/', methods=['POST'])

@@ -66,5 +66,5 @@ func PutArtist(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	helpers.RespondWithFormat(w, r, "Genre updated successfully")
+	helpers.RespondWithFormat(w, r, "Artist updated successfully")
 }

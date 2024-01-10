@@ -31,9 +31,9 @@ def get_album(id):
           description: Ok
           content:
             application/json:
-              schema: album
+              schema: AlbumSchema
             application/yaml:
-              schema: album
+              schema: AlbumSchema
         '401':
           description: Unauthorized
           content:
@@ -65,9 +65,9 @@ def get_albums():
           description: Ok
           content:
             application/json:
-              schema: album
+              schema: AlbumSchema
             application/yaml:
-              schema: album
+              schema: AlbumSchema
         '401':
           description: Unauthorized
           content:
@@ -106,9 +106,9 @@ def put_album(id):
           description: Ok
           content:
             application/json:
-              schema: album
+              schema: Album
             application/yaml:
-              schema: album
+              schema: Album
         '400':
           description: Bad request
           content:
@@ -139,7 +139,7 @@ def put_album(id):
         error = UnprocessableEntitySchema().loads(json.dumps(err.messages))
         return content_negotiation(error, error.get("code"))
 
-    return content_negotiation(*albums_service.update_album(id, album_update))
+    return content_negotiation(*albums_service.modify_album(id, album_update))
   
 
 @albums.route('/', methods=['POST'])
@@ -168,9 +168,9 @@ def post_album():
           description: Created
           content:
             application/json:
-              schema: album
+              schema: Album
             application/yaml:
-              schema: album
+              schema: Album
         '400':
           description: Bad request
           content:
