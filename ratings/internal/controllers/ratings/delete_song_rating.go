@@ -2,29 +2,30 @@ package ratings
 
 import (
 	"encoding/json"
-	"github.com/gofrs/uuid"
-	"github.com/sirupsen/logrus"
 	"middleware/example/internal/models"
 	"middleware/example/internal/services/ratings"
 	"net/http"
+
+	"github.com/gofrs/uuid"
+	"github.com/sirupsen/logrus"
 )
 
-// DeleteSongRating
+// DeleteMusicRating
 // @Tags         ratings
-// @Summary      Delete a song rating.
-// @Description  Delete a song rating.
-// @Param        song_id        path      string  true  "Song UUID formatted ID"
-// @Param        rating_id      path      string  true  "Rating UUID formatted ID"
+// @Summary      Delete a music rating.
+// @Description  Delete a music rating.
+// @Param        music_id        path      string  true  "Music UUID formatted ID"
+// @Param        rating_id       path      string  true  "Rating UUID formatted ID"
 // @Success      204            "No Content"
 // @Failure      422            "Cannot parse id"
 // @Failure      500            "Something went wrong"
-// @Router       /songs/{song_id}/ratings/{rating_id} [delete]
-func DeleteSongRating(w http.ResponseWriter, r *http.Request) {
+// @Router       /musics/{music_id}/ratings/{rating_id} [delete]
+func DeleteMusicRating(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-	songID, _ := ctx.Value("songID").(uuid.UUID)
+	musicID, _ := ctx.Value("musicID").(uuid.UUID)
 	ratingID, _ := ctx.Value("ratingID").(uuid.UUID)
 
-	err := ratings.DeleteSongRating(songID, ratingID)
+	err := ratings.DeleteMusicRating(musicID, ratingID)
 	if err != nil {
 		logrus.Errorf("error : %s", err.Error())
 		customError, isCustom := err.(*models.CustomError)
