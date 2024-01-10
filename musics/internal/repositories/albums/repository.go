@@ -68,6 +68,13 @@ func PostAlbum(newAlbum models.Album) (uuid.UUID, error) {
 		newAlbum.Id = newId
 	}
 
+	if newAlbum.ArtistId == uuid.Nil {
+		return uuid.Nil, &models.CustomError{
+			Message: "ArtistId cannot be nil",
+			Code:    400,
+		}
+	}
+
 	_, err = db.Exec("INSERT INTO Album (id, name, artistId) VALUES (?, ?, ?)", newAlbum.Id, newAlbum.Name, newAlbum.ArtistId)
 	if err != nil {
 		return uuid.Nil, err

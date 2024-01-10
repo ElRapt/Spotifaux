@@ -16,7 +16,7 @@ import (
 // @Summary      Create a music.
 // @Description  Create a music.
 // @Param        body         	body      string  true  "Music object"
-// @Success      200            {array}  models.Music
+// @Success      201            {array}  models.Music
 // @Failure      500             "Something went wrong"
 // @Router       /musics [post]
 func PostMusic(w http.ResponseWriter, r *http.Request) {

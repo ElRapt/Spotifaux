@@ -67,7 +67,7 @@ func PutGenre(partialGenre models.Genre) (models.Genre, error) {
 		logrus.Errorf("error updating Genre: %s", err2.Error())
 		return models.Genre{}, &models.CustomError{
 			Message: "Error updating Genre",
-			Code:    500,
+			Code:    http.StatusInternalServerError,
 		}
 	}
 
