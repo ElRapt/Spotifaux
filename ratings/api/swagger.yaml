@@ -12,7 +12,7 @@ definitions:
         type: integer
       rating_date:
         type: string
-      song_id:
+      music_id:
         type: string
       user_id:
         type: string
@@ -28,19 +28,19 @@ definitions:
     type: object
 info:
   contact:
-    email: mark.ballereau@etu.uca.fr
-    name: Mark Ballereau
+    email: moran.toulisse@etu.uca.fr
+    name: Moran Toulisse
   description: API to manage ratings.
   title: Ratings API
   version: 1.0.0
 paths:
-  /songs/{song_id}/ratings:
+  /musics/{music_id}/ratings:
     get:
-      description: Get song ratings.
+      description: Get music ratings.
       parameters:
-      - description: Song UUID formatted ID
+      - description: Music UUID formatted ID
         in: path
-        name: song_id
+        name: music_id
         required: true
         type: string
       responses:
@@ -54,15 +54,15 @@ paths:
           description: Cannot parse id
         "500":
           description: Something went wrong
-      summary: Get song ratings.
+      summary: Get music ratings.
       tags:
       - ratings
     post:
-      description: Post a song rating.
+      description: Post a music rating.
       parameters:
-      - description: Song UUID formatted ID
+      - description: Music UUID formatted ID
         in: path
-        name: song_id
+        name: music_id
         required: true
         type: string
       - description: rating request
@@ -80,16 +80,16 @@ paths:
           description: rating must be between 0 and 5
         "500":
           description: Something went wrong
-      summary: Post a song rating.
+      summary: Post a music rating.
       tags:
       - ratings
-  /songs/{song_id}/ratings/{rating_id}:
+  /musics/{music_id}/ratings/{rating_id}:
     delete:
-      description: Delete a song rating.
+      description: Delete a music rating.
       parameters:
-      - description: Song UUID formatted ID
+      - description: Music UUID formatted ID
         in: path
-        name: song_id
+        name: music_id
         required: true
         type: string
       - description: Rating UUID formatted ID
@@ -104,15 +104,15 @@ paths:
           description: Cannot parse id
         "500":
           description: Something went wrong
-      summary: Delete a song rating.
+      summary: Delete a music rating.
       tags:
       - ratings
     get:
-      description: Get a song rating.
+      description: Get a music rating.
       parameters:
-      - description: Song UUID formatted ID
+      - description: Music UUID formatted ID
         in: path
-        name: song_id
+        name: music_id
         required: true
         type: string
       - description: Rating UUID formatted ID
@@ -131,15 +131,15 @@ paths:
           description: Cannot parse id
         "500":
           description: Something went wrong
-      summary: Get a song rating.
+      summary: Get a music rating.
       tags:
       - ratings
     put:
-      description: Modify a song rating.
+      description: Modify a music rating.
       parameters:
-      - description: Song UUID formatted ID
+      - description: Music UUID formatted ID
         in: path
-        name: song_id
+        name: music_id
         required: true
         type: string
       - description: Rating UUID formatted ID
@@ -164,7 +164,7 @@ paths:
           description: rating must be between 0 and 5
         "500":
           description: Something went wrong
-      summary: Modify a song rating.
+      summary: Modify a music rating.
       tags:
       - ratings
 produces:

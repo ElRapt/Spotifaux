@@ -1,27 +1,28 @@
 package main
 
 import (
-	"github.com/go-chi/chi/v5"
-	"github.com/sirupsen/logrus"
 	"middleware/example/internal/controllers/ratings"
 	"middleware/example/internal/helpers"
 	_ "middleware/example/internal/models"
 	"net/http"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/sirupsen/logrus"
 )
 
 func main() {
 	r := chi.NewRouter()
 
-	r.Route("/songs/{song_id}", func(r chi.Router) {
+	r.Route("/musics/{music_id}", func(r chi.Router) {
 		r.Route("/ratings", func(r chi.Router) {
-			r.Use(ratings.CtxSongID)
-			r.Get("/", ratings.GetSongRatings)
-			r.Post("/", ratings.PostSongRating)
+			r.Use(ratings.CtxMusicID)
+			r.Get("/", ratings.GetMusicRatings)
+			r.Post("/", ratings.PostMusicRating)
 			r.Route("/{rating_id}", func(r chi.Router) {
 				r.Use(ratings.CtxRatingID)
-				r.Get("/", ratings.GetSongRating)
-				r.Put("/", ratings.PutSongRating)
-				r.Delete("/", ratings.DeleteSongRating)
+				r.Get("/", ratings.GetMusicRating)
+				r.Put("/", ratings.PutMusicRating)
+				r.Delete("/", ratings.DeleteMusicRating)
 			})
 		})
 	})
@@ -41,7 +42,7 @@ func init() {
 			comment VARCHAR(255) NOT NULL,
     		rating INT NOT NULL,
     		rating_date DATE NOT NULL,
-    		song_id VARCHAR(255) NOT NULL,
+    		music_id VARCHAR(255) NOT NULL,
     		user_id VARCHAR(255) NOT NULL
 		);`,
 	}
