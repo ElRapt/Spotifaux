@@ -8,6 +8,7 @@ from schemas.user import *
 from schemas.genre import *
 from schemas.user_auth import *
 from schemas.errors import *
+from schemas.ratings import *
 
 
 # Create an APISpec
@@ -32,6 +33,9 @@ spec.components.schema("UnprocessableEntity", schema=UnprocessableEntitySchema)
 spec.components.schema("SomethingWentWrong", schema=SomethingWentWrongSchema)
 spec.components.schema("Genre", schema=GenreSchema)
 spec.components.schema("GenreUpdate", schema=GenreUpdateSchema)
+spec.components.schema("Rating", schema=RatingSchema)
+spec.components.schema("NewRating", schema=NewRatingSchema)
+spec.components.schema("RatingUpdate", schema=RatingUpdateSchema)
 
 # add swagger tags that are used for endpoint annotation
 tags = [
@@ -50,6 +54,10 @@ tags = [
     {
         "name": "genres",
         "description": "Managing genres"
+    },
+    {
+        "name": "ratings",
+        "description": "Managing ratings"
     }
 ]
 
