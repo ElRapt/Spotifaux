@@ -13,7 +13,17 @@ class AlbumSchema(Schema):
         return (not obj.get("id") or obj.get("id") == "") and \
                (not obj.get("name") or obj.get("name") == "") and \
                (not obj.get("artistId") or obj.get("artistId") == "")
-    
+
+class BaseAlbumSchema(Schema):
+    name = fields.String(description="Name")
+    artistId = fields.String(description="ArtistId")
+
+class NewAlbumSchema(BaseAlbumSchema):
+    @validates_schema
+    def validates_schemas(self, data, **kwargs):
+        if "name" not in data or data["name"] == "" or \
+                "artistId" not in data or data["artistId"] == "":
+            raise ValidationError("['name','artistId'] must all be specified")
 
 # Schéma genre de modification (name)
 class AlbumUpdateSchema(AlbumSchema):

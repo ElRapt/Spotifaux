@@ -8,7 +8,7 @@ from helpers.content_negotiation import content_negotiation
 from models.http_exceptions import *
 from schemas.errors import *
 import services.ratings as ratings_service
-from schemas.ratings import NewRatingSchema, RatingUpdateSchema
+from schemas.rating import NewRatingSchema, RatingUpdateSchema
 
 ratings = Blueprint(name="ratings", import_name=__name__)
 

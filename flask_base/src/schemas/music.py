@@ -19,6 +19,20 @@ class MusicSchema(Schema):
                (not obj.get("albumId") or obj.get("albumId") == "")
 
 
+class BaseMusicSchema(Schema):
+    title = fields.String(description="Title")
+    artistId = fields.String(description="ArtistId")
+    genreId = fields.String(description="GenreId")
+    albumId = fields.String(description="AlbumId")
+    
+class NewMusicSchema(BaseMusicSchema):
+    @validates_schema
+    def validates_schemas(self, data, **kwargs):
+        if "title" not in data or data["title"] == "" or \
+                "artistId" not in data or data["artistId"] == "" or \
+                "genreId" not in data or data["genreId"] == "" or \
+                "albumId" not in data or data["albumId"] == "":
+            raise ValidationError("['title','artistId','genreId','albumId'] must all be specified")
 
 # Schéma musique de modification (name, username, password)
 class MusicUpdateSchema(MusicSchema):

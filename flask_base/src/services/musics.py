@@ -18,14 +18,30 @@ def music_exists(music_id):
     return False
 
 def get_music(id):
+    from src.services.ratings import get_ratings
+
     response = requests.request(method="GET", url=musics_url+id)
     if response.status_code != 200:
         return response.json(), response.status_code
-    return response.json(), 200
+
+    body = response.json()
+    body["ratings"], _ = get_ratings(id)
+
+    return body, response.status_code
 
 def get_musics():
+    from src.services.ratings import get_ratings
     response = requests.request(method="GET", url=musics_url)
-    return response.json(), response.status_code
+    if response.status_code != 200:
+        return response.json(), response.status_code
+
+    body = response.json()
+
+    for music in body:
+        music["ratings"], _ = get_ratings(music["id"])
+
+    return body, response.status_code
+
 
 
 def create_music(music_register):

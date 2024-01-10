@@ -13,6 +13,16 @@ class GenreSchema(Schema):
                (not obj.get("name") or obj.get("name") == "")
     
 
+class BaseGenreSchema(Schema):
+    name = fields.String(description="Name")
+
+
+class NewGenreSchema(BaseGenreSchema):
+    @validates_schema
+    def validates_schemas(self, data, **kwargs):
+        if "name" not in data or data["name"] == "":
+            raise ValidationError("['name'] must all be specified")
+        
 # Schéma genre de modification (name)
 class GenreUpdateSchema(GenreSchema):
     # permet de définir dans quelles conditions le schéma est validé ou nom

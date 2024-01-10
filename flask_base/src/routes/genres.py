@@ -33,9 +33,9 @@ def get_genre(id):
           description: Ok
           content:
             application/json:
-              schema: Genre
+              schema: GenreSchema
             application/yaml:
-              schema: Genre
+              schema: GenreSchema
         '401':
           description: Unauthorized
           content:
@@ -172,9 +172,9 @@ def post_genre():
         required: true
         content:
           application/json:
-            schema: GenreUpdateSchema
+            schema: NewGenreSchema
           application/yaml:
-            schema: GenreUpdateSchema
+            schema: NewGenreSchema
       responses:
         '201':
           description: Created

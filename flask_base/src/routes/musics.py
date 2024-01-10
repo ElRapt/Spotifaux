@@ -210,9 +210,9 @@ def post_music():
           description: Created
           content:
             application/json:
-              schema: MusicSchema
+              schema: NewMusicSchema
             application/yaml:
-              schema: MusicSchema
+              schema: NewMusicSchema
         '401':
           description: Unauthorized
           content:

@@ -5,7 +5,7 @@ from flask_login import current_user
 from marshmallow import EXCLUDE
 
 from models.http_exceptions import *
-from schemas.ratings import RatingSchema
+from schemas.rating import RatingSchema
 from services.musics import music_exists
 
 

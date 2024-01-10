@@ -160,9 +160,9 @@ def post_album():
         required: true
         content:
           application/json:
-            schema: AlbumUpdateSchema
+            schema: NewAlbumSchema
           application/yaml:
-            schema: AlbumUpdateSchema
+            schema: NewAlbumSchema
       responses:
         '201':
           description: Created

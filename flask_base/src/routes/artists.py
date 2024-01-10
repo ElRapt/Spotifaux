@@ -160,9 +160,9 @@ def post_artist():
         required: true
         content:
           application/json:
-            schema: artistUpdate
+            schema: NewArtistSchema
           application/yaml:
-            schema: artistUpdate
+            schema: NewArtistSchema
       responses:
         '201':
           description: Created

@@ -8,7 +8,7 @@ from schemas.user import *
 from schemas.genre import *
 from schemas.user_auth import *
 from schemas.errors import *
-from schemas.ratings import *
+from  schemas.rating import *
 
 
 # Create an APISpec

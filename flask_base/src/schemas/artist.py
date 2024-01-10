@@ -12,6 +12,16 @@ class ArtistSchema(Schema):
         return (not obj.get("id") or obj.get("id") == "") and \
                (not obj.get("name") or obj.get("name") == "")
 
+
+class BaseArtistSchema(Schema):
+    name = fields.String(description="Name")
+
+class NewArtistSchema(BaseArtistSchema):
+    @validates_schema
+    def validates_schemas(self, data, **kwargs):
+        if "name" not in data or data["name"] == "":
+            raise ValidationError("['name'] must all be specified")
+
 # Schéma artiste de modification (name)
 class ArtistUpdateSchema(ArtistSchema):
     # permet de définir dans quelles conditions le schéma est validé ou nom
