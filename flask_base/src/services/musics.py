@@ -26,6 +26,7 @@ def create_music(music_register):
     response = requests.request(method="POST", url=musics_url, json=music_schema)
     if response.status_code != 201:
         return response.json(), response.status_code
+    return response.json(), 201
 
 
 
@@ -38,3 +39,8 @@ def modify_music(id, music_update):
         return response.json(), response.status_code
 
 
+def delete_music(id):
+    response = requests.request(method="DELETE", url=musics_url+id)
+    if response.status_code != 204:
+        return response.json(), response.status_code
+    return "", 204
