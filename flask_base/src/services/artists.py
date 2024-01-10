@@ -14,7 +14,9 @@ artists_url = "http://localhost:8081/artists/"  # URL de l'API artist (golang)
 
 def get_artist(id):
     response = requests.request(method="GET", url=artists_url+id)
-    return response.json(), response.status_code
+    if response.status_code != 200:
+        return response.json(), response.status_code
+    return response.json(), 200
 
 def get_artists():
     response = requests.request(method="GET", url=artists_url)
