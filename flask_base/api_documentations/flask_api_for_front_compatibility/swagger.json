@@ -59,7 +59,7 @@
             "format": "date-time",
             "type": "string"
           },
-          "song_id": {
+          "music_id": {
             "type": "string"
           },
           "user_id": {
@@ -108,7 +108,7 @@
         },
         "type": "object"
       },
-      "Song": {
+      "Music": {
         "properties": {
           "artist": {
             "description": "Artist",
@@ -128,7 +128,7 @@
             "type": "string"
           },
           "ratings": {
-            "description": "Song's ratings",
+            "description": "Music's ratings",
             "items": {
               "$ref": "#/components/schemas/Rating"
             },
@@ -141,7 +141,7 @@
         },
         "type": "object"
       },
-      "SongRegister": {
+      "MusicRegister": {
         "properties": {
           "artist": {
             "description": "Artist",
@@ -158,7 +158,7 @@
         },
         "type": "object"
       },
-      "SongUpdate": {
+      "MusicUpdate": {
         "properties": {
           "artist": {
             "description": "Artist",
@@ -520,16 +520,16 @@
         ]
       }
     },
-    "/songs/": {
+    "/musics/": {
       "get": {
-        "description": "Getting all songs",
+        "description": "Getting all musics",
         "responses": {
           "200": {
             "content": {
               "application/json": {
                 "schema": {
                   "items": {
-                    "$ref": "#/components/schemas/Song"
+                    "$ref": "#/components/schemas/Music"
                   },
                   "type": "array"
                 }
@@ -537,7 +537,7 @@
               "application/yaml": {
                 "schema": {
                   "items": {
-                    "$ref": "#/components/schemas/Song"
+                    "$ref": "#/components/schemas/Music"
                   },
                   "type": "array"
                 }
@@ -562,16 +562,16 @@
           }
         },
         "tags": [
-          "songs"
+          "musics"
         ]
       },
       "post": {
-        "description": "Adding a song",
+        "description": "Adding a music",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SongRegister"
+                "$ref": "#/components/schemas/MusicRegister"
               }
             }
           },
@@ -582,12 +582,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Song"
+                  "$ref": "#/components/schemas/Music"
                 }
               },
               "application/yaml": {
                 "schema": {
-                  "$ref": "#/components/schemas/Song"
+                  "$ref": "#/components/schemas/Music"
                 }
               }
             },
@@ -655,18 +655,18 @@
           }
         },
         "tags": [
-          "songs"
+          "musics"
         ]
       }
     },
-    "/songs/{song_id}": {
+    "/musics/{music_id}": {
       "delete": {
-        "description": "Deleting a song",
+        "description": "Deleting a music",
         "parameters": [
           {
-            "description": "UUID of song id",
+            "description": "UUID of music id",
             "in": "path",
-            "name": "song_id",
+            "name": "music_id",
             "required": true,
             "schema": {
               "type": "uuidv4"
@@ -709,16 +709,16 @@
           }
         },
         "tags": [
-          "songs"
+          "musics"
         ]
       },
       "get": {
-        "description": "Getting a song",
+        "description": "Getting a music",
         "parameters": [
           {
-            "description": "UUID of song id",
+            "description": "UUID of music id",
             "in": "path",
-            "name": "song_id",
+            "name": "music_id",
             "required": true,
             "schema": {
               "type": "uuidv4"
@@ -730,12 +730,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Song"
+                  "$ref": "#/components/schemas/Music"
                 }
               },
               "application/yaml": {
                 "schema": {
-                  "$ref": "#/components/schemas/Song"
+                  "$ref": "#/components/schemas/Music"
                 }
               }
             },
@@ -788,16 +788,16 @@
           }
         },
         "tags": [
-          "songs"
+          "musics"
         ]
       },
       "put": {
-        "description": "Updating a song",
+        "description": "Updating a music",
         "parameters": [
           {
-            "description": "UUID of song id",
+            "description": "UUID of music id",
             "in": "path",
-            "name": "song_id",
+            "name": "music_id",
             "required": true,
             "schema": {
               "type": "uuidv4"
@@ -808,7 +808,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SongUpdate"
+                "$ref": "#/components/schemas/MusicUpdate"
               }
             }
           },
@@ -819,12 +819,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Song"
+                  "$ref": "#/components/schemas/Music"
                 }
               },
               "application/yaml": {
                 "schema": {
-                  "$ref": "#/components/schemas/Song"
+                  "$ref": "#/components/schemas/Music"
                 }
               }
             },
@@ -892,18 +892,18 @@
           }
         },
         "tags": [
-          "songs"
+          "musics"
         ]
       }
     },
-    "/songs/{song_id}/ratings": {
+    "/musics/{music_id}/ratings": {
       "get": {
-        "description": "Getting ratings of a song",
+        "description": "Getting ratings of a music",
         "parameters": [
           {
-            "description": "UUID of song id",
+            "description": "UUID of music id",
             "in": "path",
-            "name": "song_id",
+            "name": "music_id",
             "required": true,
             "schema": {
               "type": "uuidv4"
@@ -976,16 +976,16 @@
         },
         "tags": [
           "ratings",
-          "songs"
+          "musics"
         ]
       },
       "post": {
         "description": "Adding a rating",
         "parameters": [
           {
-            "description": "UUID of song",
+            "description": "UUID of music",
             "in": "path",
-            "name": "song_id",
+            "name": "music_id",
             "required": true,
             "schema": {
               "type": "uuidv4"
@@ -1081,18 +1081,18 @@
         },
         "tags": [
           "ratings",
-          "songs"
+          "musics"
         ]
       }
     },
-    "/songs/{song_id}/ratings/{rating_id}": {
+    "/musics/{music_id}/ratings/{rating_id}": {
       "delete": {
         "description": "Deleting one's rating",
         "parameters": [
           {
-            "description": "UUID of song",
+            "description": "UUID of music",
             "in": "path",
-            "name": "song_id",
+            "name": "music_id",
             "required": true,
             "schema": {
               "type": "uuidv4"
@@ -1160,16 +1160,16 @@
         },
         "tags": [
           "ratings",
-          "songs"
+          "musics"
         ]
       },
       "get": {
         "description": "Getting a specific rating",
         "parameters": [
           {
-            "description": "UUID of song",
+            "description": "UUID of music",
             "in": "path",
-            "name": "song_id",
+            "name": "music_id",
             "required": true,
             "schema": {
               "type": "uuidv4"
@@ -1249,16 +1249,16 @@
         },
         "tags": [
           "ratings",
-          "songs"
+          "musics"
         ]
       },
       "put": {
         "description": "Updating one's rating",
         "parameters": [
           {
-            "description": "UUID of song",
+            "description": "UUID of music",
             "in": "path",
-            "name": "song_id",
+            "name": "music_id",
             "required": true,
             "schema": {
               "type": "uuidv4"
@@ -1378,7 +1378,7 @@
         },
         "tags": [
           "ratings",
-          "songs"
+          "musics"
         ]
       }
     },
@@ -1631,8 +1631,8 @@
       "name": "users"
     },
     {
-      "description": "Managing songs",
-      "name": "songs"
+      "description": "Managing musics",
+      "name": "musics"
     },
     {
       "description": "Managing ratings",

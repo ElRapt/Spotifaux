@@ -14,7 +14,7 @@
   },
   "basePath": "/",
   "paths": {
-    "/songs/{songId}/ratings": {
+    "/musics/{musicId}/ratings": {
       "get": {
         "description": "Get ratings.",
         "tags": [
@@ -69,7 +69,7 @@
         }
       }
     },
-    "/songs/{songId}/ratings/{id}": {
+    "/musics/{musicId}/ratings/{id}": {
       "get": {
         "description": "Get a rating.",
         "tags": [
@@ -184,7 +184,7 @@
         "rating_date": {
           "type": "string"
         },
-        "song_id": {
+        "music_id": {
           "type": "string"
         },
         "user_id": {
