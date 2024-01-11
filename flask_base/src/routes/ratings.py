@@ -71,13 +71,13 @@ def get_ratings(music_id):
         return ratings_service.get_ratings(music_id)
     except NotFound:
         error = NotFoundSchema().loads("{}")
-        return error, error.get("code")
+        return content_negotiation(error, error.get("code"))
     except UnprocessableEntity:
         error = UnprocessableEntitySchema().loads("{}")
-        return error, error.get("code")
+        return content_negotiation(error, error.get("code"))
     except Exception:
         error = SomethingWentWrongSchema().loads("{}")
-        return error, error.get("code")
+        return content_negotiation(error, error.get("code"))
 
 @ratings.route('/', methods=['POST'])
 @login_required
@@ -136,19 +136,19 @@ def post_rating(music_id):
         new_rating = NewRatingSchema().loads(json_data=request.data.decode('utf-8'))
     except ValidationError as e:
         error = UnprocessableEntitySchema().loads(json.dumps({"message": e.messages.__str__()}))
-        return error, error.get("code")
+        return content_negotiation(error, error.get("code"))
 
     try:
         return ratings_service.create_rating(new_rating, music_id)
     except NotFound:
         error = NotFoundSchema().loads("{}")
-        return error, error.get("code")
+        return content_negotiation(error, error.get("code"))
     except UnprocessableEntity:
         error = UnprocessableEntitySchema().loads("{}")
-        return error, error.get("code")
+        return content_negotiation(error, error.get("code"))
     except Exception:
         error = SomethingWentWrongSchema().loads("{}")
-        return error, error.get("code")
+        return content_negotiation(error, error.get("code"))
 
 @ratings.route('/<rating_id>', methods=['GET'])
 @login_required
@@ -214,13 +214,13 @@ def get_rating(music_id, rating_id):
         return ratings_service.get_rating(music_id, rating_id)
     except NotFound:
         error = NotFoundSchema().loads("{}")
-        return error, error.get("code")
+        return content_negotiation(error, error.get("code"))
     except UnprocessableEntity:
         error = UnprocessableEntitySchema().loads("{}")
-        return error, error.get("code")
+        return content_negotiation(error, error.get("code"))
     except Exception:
         error = SomethingWentWrongSchema().loads("{}")
-        return error, error.get("code")
+        return content_negotiation(error, error.get("code"))
 
 @ratings.route('/<rating_id>', methods=['DELETE'])
 @login_required
@@ -281,10 +281,10 @@ def delete_rating(music_id, rating_id):
         return ratings_service.delete_rating(music_id, rating_id)
     except Forbidden:
         error = ForbiddenSchema().loads("{}")
-        return error, error.get("code")
+        return content_negotiation(error, error.get("code"))
     except Exception:
         error = SomethingWentWrongSchema().loads("{}")
-        return error, error.get("code")
+        return content_negotiation(error, error.get("code"))
 
 @ratings.route('/<rating_id>', methods=['PUT'])
 @login_required
@@ -362,16 +362,16 @@ def put_rating(music_id, rating_id):
         rating_update = RatingUpdateSchema().loads(json_data=request.data.decode('utf-8'))
     except ValidationError as e:
         error = UnprocessableEntitySchema().loads(json.dumps({"message": e.messages.__str__()}))
-        return error, error.get("code")
+        return content_negotiation(error, error.get("code"))
 
     try:
         return ratings_service.modify_rating(music_id, rating_id, rating_update)
     except NotFound:
         error = NotFoundSchema().loads("{}")
-        return error, error.get("code")
+        return content_negotiation(error, error.get("code"))
     except Forbidden:
         error = ForbiddenSchema().loads("{}")
-        return error, error.get("code")
+        return content_negotiation(error, error.get("code"))
     except Exception:
         error = SomethingWentWrongSchema().loads("{}")
-        return error, error.get("code")
+        return content_negotiation(error, error.get("code"))
